@@ -8,7 +8,7 @@ POLE stands for People, Objects, Locations and Events and are a type of database
 
 Source Data comes from multiple sources (and exists in multiple data formats). In this guide we use a number of CSV files that we will load using Cypher's LOAD CSV (see appendix).
 
-image:https://github.com/jbarrasa/datasets/raw/master/safeguarding/integration.jpg[float=center]
+image:https://github.com/jbarrasa/datasets/raw/master/safeguarding/integration.jpg[float=center, width="300", height="300"]
 
 == The model
 
@@ -50,7 +50,7 @@ return area.areaCode, count(e) as policeInterventions order by policeInterventio
 
 == Analysing the social context of a person
 
-A person can be "clean"" but live in a "risky" environment. No police reports on an individual but directly connected to individuals with multiple arrests.
+A person can be "clean" but live in a "risky" environment. No police reports on an individual but directly connected to individuals with multiple arrests.
 
 [source,cypher]
 ----
@@ -61,11 +61,13 @@ order by dangerousFriends desc
 limit 5
 ----
 
-Visual exploration of one of the individuals: Bonnie Gilbert
+Visual exploration of one of the individuals returned by the previous query: Bonnie Gilbert's social graph.
 
 [source,cypher]
 ----
-match (p:Person {nhs_no: "622-53-3302"}) return p
+match path = (p:Person {nhs_no: "622-53-3302"})-[:KNOWS]-(friend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent)
+where not (p:Person)<-[:REPORTED_EVENT]-(:PoliceReportedEvent)
+return path
 ----
 
 But we can see that only one of the negative influence connections of Bonnie is actually local.
@@ -95,11 +97,15 @@ order by brothersDangerousFriends desc
 limit 5
 ----
 
-Visual exploration of one of the individuals: Todd Hamilton
+Visual exploration of one of the individuals returned by the previous query: Todd Hamilton's family 2nd degree graph.
 
 [source,cypher]
 ----
-match (p:Person {nhs_no: "117-66-8129"}) return p
+match path = (p:Person {nhs_no: "117-66-8129"})-[:FAMILY_REL]-(relative)-[:KNOWS]-(brothersFriend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent) ,
+(p)-[:CURRENT_ADDRESS]->()<-[:CURRENT_ADDRESS]-(relative)
+where not (p:Person)<-[:REPORTED_EVENT]-(:PoliceReportedEvent) and
+ not (relative)<-[:REPORTED_EVENT]-(:PoliceReportedEvent)
+return path
 ----
 
 == Report on risk (individual's risk  and environment risk)
