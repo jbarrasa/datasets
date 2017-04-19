@@ -1,0 +1,279 @@
+= POLE DB: Safeguarding
+
+== A POLE database for safeguarding
+
+POLE stands for People, Objects, Locations and Events and are a type of databases typically used in police/intelligence use cases.
+
+=== The problem: Integrating data from multiple sources to create a linked unified view 
+
+Source Data comes from multiple sources (and exists in multiple data formats). In this guide we use a number of CSV files that we will load using Cypher's LOAD CSV (see appendix).
+
+image:https://github.com/jbarrasa/datasets/raw/master/safeguarding/integration.jpg[float=center, width="300", height="300"]
+
+== The model
+
+The key entity types are: Person, Address, PoliceReportedEvent, SocialWorkerReportedEvent
+And there is a number of relationships between them. Let's explore them using cypher queries.
+
+image:https://github.com/jbarrasa/datasets/raw/master/safeguarding/Screen%20Shot%202017-03-13%20at%2011.39.19.png[float=right]
+The central node is Person. A person node will be connected to an address and optionally to one or many phone numbers and email addresses. There will also be reports both from social workers or the police on individuals. This query shows a small portion of the graph around a person.
+
+[source,cypher]
+----
+MATCH (n:Person)-[r]-(o)
+RETURN *  LIMIT 50
+----
+
+People know people
+
+[source,cypher]
+----
+MATCH p=()-[r:KNOWS*]->() 
+RETURN p LIMIT 25
+----
+
+Addresses structured in areas
+
+[source,cypher]
+----
+MATCH p=(addr)-[:HAS_POSTCODE]->(code)-[:CODE_IN_AREA]->(area) RETURN p LIMIT 10
+----
+
+What are the areas with more interventions by the police?
+
+[source,cypher]
+----
+match (e:PoliceReportedEvent)-[:REPORTED_EVENT]->
+(p)-[:CURRENT_ADDRESS]->(adr)-[:ADDRESS_IN_AREA]->(area)
+return area.areaCode, count(e) as policeInterventions order by policeInterventions desc limit 10
+----
+
+== Analysing the social context of a person
+
+A person can be "clean" but live in a "risky" environment. No police reports on an individual but directly connected to individuals with multiple arrests.
+
+[source,cypher]
+----
+match (p:Person)-[:KNOWS]-(friend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent) 
+where not (p:Person)<-[:REPORTED_EVENT]-(:PoliceReportedEvent)
+return p.nhs_no, p.name, p.surname, count(distinct friend) as dangerousFriends
+order by dangerousFriends desc 
+limit 5
+----
+
+Visual exploration of one of the individuals returned by the previous query: Bonnie Gilbert's social graph.
+
+[source,cypher]
+----
+match path = (p:Person {nhs_no: "622-53-3302"})-[:KNOWS]-(friend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent)
+where not (p:Person)<-[:REPORTED_EVENT]-(:PoliceReportedEvent)
+return path
+----
+
+But we can see that only one of the negative influence connections of Bonnie is actually local.
+[source,cypher]
+----
+match (p:Person {nhs_no: "622-53-3302"})-[:KNOWS]-(friend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent), 
+(p)-[:CURRENT_ADDRESS]->(bonniesAddress)-[:ADDRESS_IN_AREA]->(area), 
+(friend)-[:CURRENT_ADDRESS]->(friendsAddress)-[:ADDRESS_IN_AREA]->(area)
+return p, friend, bonniesAddress, friendsAddress, area
+limit 3
+----
+
+
+== Analysing the family context of a person
+
+A person can be in a negative family environment. No apparent negative reports on an individual but having relatives with multiple arrests.
+
+[source,cypher]
+----
+// family influence
+match (p:Person)-[:FAMILY_REL]-(relative)-[:KNOWS]-(brothersFriend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent) ,
+(p)-[:CURRENT_ADDRESS]->()<-[:CURRENT_ADDRESS]-(relative)
+where not (p:Person)<-[:REPORTED_EVENT]-(:PoliceReportedEvent) and
+ not (relative)<-[:REPORTED_EVENT]-(:PoliceReportedEvent)
+return p.nhs_no, p.name, p.surname, count(distinct brothersFriend) as brothersDangerousFriends
+order by brothersDangerousFriends desc 
+limit 5
+----
+
+Visual exploration of one of the individuals returned by the previous query: Todd Hamilton's family 2nd degree graph.
+
+[source,cypher]
+----
+match path = (p:Person {nhs_no: "117-66-8129"})-[:FAMILY_REL]-(relative)-[:KNOWS]-(brothersFriend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent) ,
+(p)-[:CURRENT_ADDRESS]->()<-[:CURRENT_ADDRESS]-(relative)
+where not (p:Person)<-[:REPORTED_EVENT]-(:PoliceReportedEvent) and
+ not (relative)<-[:REPORTED_EVENT]-(:PoliceReportedEvent)
+return path
+----
+
+== Report on risk (individual's risk  and environment risk)
+
+[source,cypher]
+----
+match (p:Person)<-[:REPORTED_EVENT]-(event) 
+with p, AVG(event.event_risk_score) as risk 
+match (p)-[:FAMILY_REL]-(relative)<-[:REPORTED_EVENT]-(relativeEvent) 
+with p, risk, AVG(relativeEvent.event_risk_score) as family_risk
+match (p)-[:KNOWS]-(friend)<-[:REPORTED_EVENT]-(friendEvent) 
+where not (p)-[:FAMILY_REL]-(friend)
+return p.nhs_no, p.name, p.surname, risk, family_risk, AVG(friendEvent.event_risk_score) as direct_environment_risk
+ limit 10
+----
+
+== Call analysis. Graph Algorithms
+
+Is there a (potentially indirect) caller-callee link between person X and person Y?
+
+[source,cypher]
+----
+WITH "9-(905)546-2174" AS x, "0-(070)893-3322" AS y 
+MATCH p = (phone1:Phone { phoneNo: x })<-[:HAS_PHONE]-(pers1)-[:KNOWS_PHONE*]-(pers2)-[:HAS_PHONE]->(phone2:Phone {phoneNo: y })
+RETURN p LIMIT 10
+----
+
+Unusually high frequency calls in number
+
+[source,cypher]
+----
+MATCH (x)<-[:CALLER|CALLED]-(c:PhoneCall)-[:CALLER|CALLED]->(y)
+RETURN x.phoneNo AS x ,y.phoneNo AS y ,COUNT(c) AS numberOfCalls 
+ORDER BY numberOfCalls DESC LIMIT 50
+----
+
+...or in duration
+
+[source,cypher]
+----
+MATCH (x)<-[:CALLER|CALLED]-(c:PhoneCall)-[:CALLER|CALLED]->(y)
+RETURN x.phoneNo AS x ,y.phoneNo AS y ,SUM(toInt(c.call_duration)) AS totalDurationOfCalls 
+LIMIT 50
+----
+
+Use of graph algorithms to find central nodes, communities/clusters
+
+[source,cypher]
+----
+...Work in progesss...
+----
+
+
+
+== Appendix: Data load
+
+If you want to rebuild the database from the source files you'll probably want to empty it first:
+[source,cypher]
+----
+MATCH (n) DETACH DELETE n
+----
+
+Once the DB is empty, and if it's not done already, we'll want to create a few indexes to accelerate data load and initial lookups for traversal starting nodes.
+
+[source,cypher]
+----
+CREATE INDEX ON :Person(nhs_no)
+----
+
+[source,cypher]
+----
+CREATE INDEX ON :Email(email_address)
+----
+
+[source,cypher]
+----
+CREATE INDEX ON :Phone(phoneNo)
+----
+
+Load data on persons
+
+[source,cypher]
+----
+USING PERIODIC COMMIT
+LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/vulnerable_people.csv" AS row
+CREATE (p:Person {nhs_no: row[0], name: row[1], surname: row[2], dob:row[7]}) 
+MERGE (a:Address { address:row[5], postcode:row[4]})
+CREATE (p)-[:CURRENT_ADDRESS]->(a)
+WITH row, p 
+WHERE row[6] IS NOT NULL 
+CREATE (f:Phone{ phoneNo:row[6]})
+CREATE (p)-[:HAS_PHONE]->(f)
+WITH row, p
+WHERE row[3] IS NOT NULL 
+CREATE (e:Email{ email_address:row[3]})
+CREATE (p)-[:HAS_EMAIL]->(e);
+----
+
+Extract postcodes and areas from addresses
+
+[source,cypher]
+----
+//Extract Postcodes And Areas
+MATCH (a:Address) 
+MERGE (p:PostCode {code: a.postcode}) 
+MERGE (a)-[:HAS_POSTCODE]->(p)
+MERGE (z:Area {areaCode: substring(a.postcode,0,3)})
+MERGE (p)-[:CODE_IN_AREA]->(z)
+MERGE (a)-[:ADDRESS_IN_AREA]->(z)
+----
+
+Load family connections
+
+[source,cypher]
+----
+USING PERIODIC COMMIT
+LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/FAMILY_DATA.csv" AS row
+MATCH (p1:Person {nhs_no: row[0]}),(p2:Person {nhs_no: row[1]})
+CREATE (p1)-[:FAMILY_REL{rel_type: row[2]}]->(p2)
+MERGE (p1)-[:KNOWS]-(p2)
+----
+
+Load data from social networks
+
+[source,cypher]
+----
+USING PERIODIC COMMIT
+LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/SOCIAL_NETWORKS.csv" AS row
+MATCH (e1:Email{ email_address:row[0]}), (e2:Email{ email_address:row[1]}), (p1)-[:HAS_EMAIL]->(e1), (p2)-[:HAS_EMAIL]->(e2)
+MERGE (p1)-[:KNOWS_SN]-(p2)
+MERGE (p1)-[:KNOWS]-(p2)
+----
+
+Load social workers reports
+
+[source,cypher]
+----
+USING PERIODIC COMMIT
+LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/SOCIAL_WORKER_REPORT_EVENTS.csv" AS row
+MATCH (p:Person {nhs_no: row[0]})
+CREATE (e:Event:SocialWorkerReportedEvent { event_category: row[4], event_desc:row[3], event_date:row[1], event_risk_score:toInt(row[2])})
+CREATE (p)<-[:REPORTED_EVENT]-(e)
+----
+
+Load police reports
+
+[source,cypher]
+----
+USING PERIODIC COMMIT
+LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/POLICE_REPORT.csv" AS row
+MATCH (p:Person {nhs_no: row[3]})
+CREATE (e:Event:PoliceReportedEvent { event_category: row[2], event_desc:row[1], event_date:row[0], event_risk_score:100*rand()})
+CREATE (p)<-[:REPORTED_EVENT]-(e)
+----
+
+Load Phone Calls from call data records (CDRs)
+
+[source,cypher]
+----
+USING PERIODIC COMMIT
+LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/CDRs_2015.csv" AS row
+MATCH (f1:Phone{ phoneNo:row[4]}), (f2:Phone{ phoneNo:row[5]})
+CREATE (pc:PhoneCall {call_date: row[3], call_type: row[2], call_duration:row[1], call_time:row[0]}), 
+(f1)<-[:CALLER]-(pc)-[:CALLED]->(f2)
+WITH f1,f2
+MATCH (p1)-[:HAS_PHONE]->(f1), (p2)-[:HAS_PHONE]->(f2)
+MERGE (p1)-[:KNOWS_PHONE]-(p2)
+MERGE (p1)-[:KNOWS]-(p2)
+----
+
+
