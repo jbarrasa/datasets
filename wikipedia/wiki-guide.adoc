@@ -22,31 +22,68 @@ CREATE INDEX ON :Category(catName)
 
 [source,cypher]
 ----
-CREATE (c:Category:RootCategory {catId: 0, catName: 'Databases', fetched : false, level: 0 })
+CREATE (c:Category:RootCategory {catId: 0, catName: 'Data_mining', subcatsFetched : false, pagesFetched : false, level: 0 })
 ----
 
-* STEP3: Load n levels by iteratively calling Wikipedia's rest API
+* STEP3: Load n levels of categories (and pages) by iteratively calling Wikipedia's rest API
+
+Subcategory request:
 
 [source,cypher]
 ----
-UNWIND range(1,5) as level 
-call apoc.cypher.doit("
-MATCH (c:Category { fetched: false, level: $level - 1})
-call apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&cmprop=ids%7Ctitle&cmlimit=500')
+UNWIND range(1,4) as level 
+CALL apoc.cypher.doit("
+MATCH (c:Category { subcatsFetched: false, level: $level - 1})
+CALL apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&cmprop=ids%7Ctitle&cmlimit=500')
 YIELD value as results
 UNWIND results.query.categorymembers AS subcat
 MERGE (sc:Category {catId: subcat.pageid})
 ON CREATE SET sc.catName = substring(subcat.title,9),
-              sc.fetched = false,
+              sc.subcatsFetched = false,
+              sc.pagesFetched = false,
               sc.level = $level
 WITH sc,c
 CALL apoc.create.addLabels(sc,['Level' + $level + 'Category']) YIELD node
 MERGE (sc)-[:SUBCAT_OF]->(c)
 WITH DISTINCT c
-SET c.fetched = true", { level: level }) yield value
+SET c.subcatsFetched = true", { level: level }) YIELD value
+RETURN value
+----
+
+Page request:
+
+[source,cypher]
+----
+UNWIND range(1,4) as level 
+CALL apoc.cypher.doit("
+MATCH (c:Category { pagesFetched: false, level: $level - 1})
+CALL apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=page&cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&cmprop=ids%7Ctitle&cmlimit=500')
+YIELD value as results
+UNWIND results.query.categorymembers AS page
+MERGE (p:Page {pageId: page.pageid})
+ON CREATE SET p.pageTitle = page.title, p.pageUrl = 'http://en.wikipedia.org/wiki/' + replace(page.title, ' ', '_')
+WITH p,c
+MERGE (p)-[:IN_CATEGORY]->(c)
+WITH DISTINCT c
+SET c.pagesFetched = true", { level: level }) yield value
 return value
 ----
 
+== Enriching the knowledge graph with DBPedia data
+Wikipedia's api does not expose the content of the pages, but DBpedia does, at least the abstract.
+[source,cypher]
+----
+MATCH (p:Page) 
+WITH 
+"SELECT ?label 
+ WHERE  { 
+ 			?x <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> <"  + p.pageUrl  + "> ; 
+               <http://dbpedia.org/ontology/abstract> ?label .
+            FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en')) } LIMIT 1
+        " AS sparql, p
+CALL apoc.load.json('http://dbpedia.org/sparql/?query=' + apoc.text.urlencode(sparql) + '&format=application%2Fsparql-results%2Bjson') WIELD value
+SET p.abstract = value.results.bindings[0].label.value
+----
 
 == Exploring the dataset
 

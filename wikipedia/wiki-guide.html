@@ -80,34 +80,86 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">CREATE (c:Category:RootCategory {catId: 0, catName: 'Databases', fetched : false, level: 0 })</code></pre>
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">CREATE (c:Category:RootCategory {catId: 0, catName: 'Data_mining', subcatsFetched : false, pagesFetched : false, level: 0 })</code></pre>
 </div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>STEP3: Load n levels by iteratively calling Wikipedia&#8217;s rest API</p>
+<p>STEP3: Load n levels of categories (and pages) by iteratively calling Wikipedia&#8217;s rest API</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>Subcategory request:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">UNWIND range(1,5) as level
-call apoc.cypher.doit("
-MATCH (c:Category { fetched: false, level: $level - 1})
-call apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&amp;action=query&amp;list=categorymembers&amp;cmtype=subcat&amp;cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&amp;cmprop=ids%7Ctitle&amp;cmlimit=500')
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">UNWIND range(1,4) as level
+CALL apoc.cypher.doit("
+MATCH (c:Category { subcatsFetched: false, level: $level - 1})
+CALL apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&amp;action=query&amp;list=categorymembers&amp;cmtype=subcat&amp;cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&amp;cmprop=ids%7Ctitle&amp;cmlimit=500')
 YIELD value as results
 UNWIND results.query.categorymembers AS subcat
 MERGE (sc:Category {catId: subcat.pageid})
 ON CREATE SET sc.catName = substring(subcat.title,9),
-              sc.fetched = false,
+              sc.subcatsFetched = false,
+              sc.pagesFetched = false,
               sc.level = $level
 WITH sc,c
 CALL apoc.create.addLabels(sc,['Level' + $level + 'Category']) YIELD node
 MERGE (sc)-[:SUBCAT_OF]-&gt;(c)
 WITH DISTINCT c
-SET c.fetched = true", { level: level }) yield value
+SET c.subcatsFetched = true", { level: level }) YIELD value
+RETURN value</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Page request:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">UNWIND range(1,4) as level
+CALL apoc.cypher.doit("
+MATCH (c:Category { pagesFetched: false, level: $level - 1})
+CALL apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&amp;action=query&amp;list=categorymembers&amp;cmtype=page&amp;cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&amp;cmprop=ids%7Ctitle&amp;cmlimit=500')
+YIELD value as results
+UNWIND results.query.categorymembers AS page
+MERGE (p:Page {pageId: page.pageid})
+ON CREATE SET p.pageTitle = page.title, p.pageUrl = 'http://en.wikipedia.org/wiki/' + replace(page.title, ' ', '_')
+WITH p,c
+MERGE (p)-[:IN_CATEGORY]-&gt;(c)
+WITH DISTINCT c
+SET c.pagesFetched = true", { level: level }) yield value
 return value</code></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Enriching the knowledge graph with DBPedia data</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Wikipedia&#8217;s api does not expose the content of the pages, but DBpedia does, at least the abstract.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH (p:Page)
+WITH
+"SELECT ?label
+ WHERE  {
+ 			?x &lt;http://xmlns.com/foaf/0.1/isPrimaryTopicOf&gt; &lt;"  + p.pageUrl  + "&gt; ;
+               &lt;http://dbpedia.org/ontology/abstract&gt; ?label .
+            FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en')) } LIMIT 1
+        " AS sparql, p
+CALL apoc.load.json('http://dbpedia.org/sparql/?query=' + apoc.text.urlencode(sparql) + '&amp;format=application%2Fsparql-results%2Bjson') WIELD value
+SET p.abstract = value.results.bindings[0].label.value</code></pre>
 </div>
 </div>
 	</div>
