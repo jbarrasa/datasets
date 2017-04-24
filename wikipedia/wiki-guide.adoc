@@ -1,279 +1,309 @@
-= POLE DB: Safeguarding
+= Online Meetup: Building the Wikipedia Knowledge Graph in Neo4j
 
-== A POLE database for safeguarding
+== Loading a reduced subset of the Wikipedia categories
 
-POLE stands for People, Objects, Locations and Events and are a type of databases typically used in police/intelligence use cases.
+Get data from https://www.mediawiki.org/wiki/API:Main_page[the  MediaWiki action API]
 
-=== The problem: Integrating data from multiple sources to create a linked unified view 
+https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:Databases&cmprop=ids%7Ctitle&cmlimit=500[sample request]
 
-Source Data comes from multiple sources (and exists in multiple data formats). In this guide we use a number of CSV files that we will load using Cypher's LOAD CSV (see appendix).
-
-image:https://github.com/jbarrasa/datasets/raw/master/safeguarding/integration.jpg[float=center, width="300", height="300"]
-
-== The model
-
-The key entity types are: Person, Address, PoliceReportedEvent, SocialWorkerReportedEvent
-And there is a number of relationships between them. Let's explore them using cypher queries.
-
-image:https://github.com/jbarrasa/datasets/raw/master/safeguarding/Screen%20Shot%202017-03-13%20at%2011.39.19.png[float=right]
-The central node is Person. A person node will be connected to an address and optionally to one or many phone numbers and email addresses. There will also be reports both from social workers or the police on individuals. This query shows a small portion of the graph around a person.
+* STEP1: Prepare the DB
 
 [source,cypher]
 ----
-MATCH (n:Person)-[r]-(o)
-RETURN *  LIMIT 50
+CREATE INDEX ON :Category(catId)
 ----
-
-People know people
 
 [source,cypher]
 ----
-MATCH p=()-[r:KNOWS*]->() 
-RETURN p LIMIT 25
+CREATE INDEX ON :Category(catName)
 ----
 
-Addresses structured in areas
+* STEP2: Select your root category
 
 [source,cypher]
 ----
-MATCH p=(addr)-[:HAS_POSTCODE]->(code)-[:CODE_IN_AREA]->(area) RETURN p LIMIT 10
+CREATE (c:Category:RootCategory {catId: 0, catName: 'Databases', fetched : false, level: 0 })
 ----
 
-What are the areas with more interventions by the police?
+* STEP3: Load n levels by iteratively calling Wikipedia's rest API
 
 [source,cypher]
 ----
-match (e:PoliceReportedEvent)-[:REPORTED_EVENT]->
-(p)-[:CURRENT_ADDRESS]->(adr)-[:ADDRESS_IN_AREA]->(area)
-return area.areaCode, count(e) as policeInterventions order by policeInterventions desc limit 10
+UNWIND range(1,5) as level 
+call apoc.cypher.doit("
+MATCH (c:Category { fetched: false, level: $level - 1})
+call apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&cmprop=ids%7Ctitle&cmlimit=500')
+YIELD value as results
+UNWIND results.query.categorymembers AS subcat
+MERGE (sc:Category {catId: subcat.pageid})
+ON CREATE SET sc.catName = substring(subcat.title,9),
+              sc.fetched = false,
+              sc.level = $level
+WITH sc,c
+CALL apoc.create.addLabels(sc,['Level' + $level + 'Category']) YIELD node
+MERGE (sc)-[:SUBCAT_OF]->(c)
+WITH DISTINCT c
+SET c.fetched = true", { level: level }) yield value
+return value
 ----
 
-== Analysing the social context of a person
 
-A person can be "clean" but live in a "risky" environment. No police reports on an individual but directly connected to individuals with multiple arrests.
+== Exploring the dataset
+
+Biggest categories...
 
 [source,cypher]
 ----
-match (p:Person)-[:KNOWS]-(friend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent) 
-where not (p:Person)<-[:REPORTED_EVENT]-(:PoliceReportedEvent)
-return p.nhs_no, p.name, p.surname, count(distinct friend) as dangerousFriends
-order by dangerousFriends desc 
-limit 5
+MATCH (c:Category)
+RETURN c.catName AS category, 
+	   size((c)<-[:SUBCAT_OF]-()) AS subcatCount, 
+       size((c)-[:SUBCAT_OF]->()) AS superCatCount, 
+       size((c)-[:SUBCAT_OF]-()) AS total
+ORDER BY total DESC 
+LIMIT 500
 ----
 
-Visual exploration of one of the individuals returned by the previous query: Bonnie Gilbert's social graph.
+== Exploring the dataset
+
+Adding a 'balance index'
 
 [source,cypher]
 ----
-match path = (p:Person {nhs_no: "622-53-3302"})-[:KNOWS]-(friend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent)
-where not (p:Person)<-[:REPORTED_EVENT]-(:PoliceReportedEvent)
+MATCH (c:Category)
+WITH c.catName AS category,        
+	 size((c)<-[:SUBCAT_OF]-()) AS subCatCount, 
+     size((c)-[:SUBCAT_OF]->()) AS superCatCount
+WHERE  subCatCount > 0 AND superCatCount > 0
+RETURN category, 
+	   ABS(toFloat(superCatCount - subCatCount)/(superCatCount + subCatCount)) as balanceIndex, 
+	   subCatCount, 
+       superCatCount
+ORDER BY balanceIndex DESC 
+LIMIT 500
+----
+
+== Exploring the dataset
+
+Aggregates...
+
+[source,cypher]
+----
+MATCH (c:Category)
+WITH c.catName AS category,        
+	 size((c)<-[:SUBCAT_OF]-()) AS subCatCount, 
+     size((c)-[:SUBCAT_OF]->()) AS superCatCount, 
+     size((c)-[:SUBCAT_OF]-()) AS total
+//WHERE  subCatCount > 0 AND superCatCount > 0
+RETURN AVG(subCatCount) AS `AVG #subcats`,
+	   MIN(subCatCount) AS `MIN #subcats`,
+       MAX(subCatCount)  AS `MAX #subcats`, 
+       percentileCont(subCatCount,0.9)  AS `.9p #subcats`,
+       AVG(superCatCount) AS `AVG #supercats`,
+       MIN(superCatCount) AS `MIN #supercats`,
+       MAX(superCatCount) AS `MAX #supercats`, 
+       percentileCont(superCatCount,0.95) AS `.9p #supercats`
+----
+
+
+== Exploring the dataset
+
+What is the hierachy connecting DBs and Google Doodles?
+
+[source,cypher]
+----
+MATCH shortestFullHierarchy = shortestPath((doodles:Category {catName : 'Google Doodles'})-[:SUBCAT_OF*]->(root:RootCategory)) 
+RETURN shortestFullHierarchy
+----
+
+== Exploring the dataset
+
+Some unexpectedly(?) long hierarchies
+
+[source,cypher]
+----
+MATCH path =()-[r:SUBCAT_OF*10..]->() WITH path LIMIT 1
 return path
 ----
 
-But we can see that only one of the negative influence connections of Bonnie is actually local.
-[source,cypher]
-----
-match (p:Person {nhs_no: "622-53-3302"})-[:KNOWS]-(friend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent), 
-(p)-[:CURRENT_ADDRESS]->(bonniesAddress)-[:ADDRESS_IN_AREA]->(area), 
-(friend)-[:CURRENT_ADDRESS]->(friendsAddress)-[:ADDRESS_IN_AREA]->(area)
-return p, friend, bonniesAddress, friendsAddress, area
-limit 3
-----
+== Exploring the dataset
 
-
-== Analysing the family context of a person
-
-A person can be in a negative family environment. No apparent negative reports on an individual but having relatives with multiple arrests.
+Loops!
 
 [source,cypher]
 ----
-// family influence
-match (p:Person)-[:FAMILY_REL]-(relative)-[:KNOWS]-(brothersFriend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent) ,
-(p)-[:CURRENT_ADDRESS]->()<-[:CURRENT_ADDRESS]-(relative)
-where not (p:Person)<-[:REPORTED_EVENT]-(:PoliceReportedEvent) and
- not (relative)<-[:REPORTED_EVENT]-(:PoliceReportedEvent)
-return p.nhs_no, p.name, p.surname, count(distinct brothersFriend) as brothersDangerousFriends
-order by brothersDangerousFriends desc 
-limit 5
+MATCH loop = (cat)-[r:SUBCAT_OF*]->(cat) 
+RETURN loop LIMIT 1
 ----
 
-Visual exploration of one of the individuals returned by the previous query: Todd Hamilton's family 2nd degree graph.
+== Loading the data from an sql dump via LOAD CSV
+
+First load the categories
 
 [source,cypher]
 ----
-match path = (p:Person {nhs_no: "117-66-8129"})-[:FAMILY_REL]-(relative)-[:KNOWS]-(brothersFriend)<-[:REPORTED_EVENT]-(friendEvent:PoliceReportedEvent) ,
-(p)-[:CURRENT_ADDRESS]->()<-[:CURRENT_ADDRESS]-(relative)
-where not (p:Person)<-[:REPORTED_EVENT]-(:PoliceReportedEvent) and
- not (relative)<-[:REPORTED_EVENT]-(:PoliceReportedEvent)
-return path
+using periodic commit 10000
+load csv from "https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/cats.csv?raw=true" as row
+CREATE (c:Category { catId: row[0]}) 
+SET c.catName = row[2], c.pageCount = toInt(row[3]), c.subcatCount = toInt(row[4])
 ----
 
-== Report on risk (individual's risk  and environment risk)
+And then the subcategory relationships
 
 [source,cypher]
 ----
-match (p:Person)<-[:REPORTED_EVENT]-(event) 
-with p, AVG(event.event_risk_score) as risk 
-match (p)-[:FAMILY_REL]-(relative)<-[:REPORTED_EVENT]-(relativeEvent) 
-with p, risk, AVG(relativeEvent.event_risk_score) as family_risk
-match (p)-[:KNOWS]-(friend)<-[:REPORTED_EVENT]-(friendEvent) 
-where not (p)-[:FAMILY_REL]-(friend)
-return p.nhs_no, p.name, p.surname, risk, family_risk, AVG(friendEvent.event_risk_score) as direct_environment_risk
- limit 10
+using periodic commit 10000
+load csv from "https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/rels.csv?raw=true" as row
+MATCH (from:Category { catId: row[0]}) 
+MATCH (to:Category { catId: row[1]})
+CREATE (from)-[:SUBCAT_OF]->(to)
 ----
 
-== Call analysis. Graph Algorithms
 
-Is there a (potentially indirect) caller-callee link between person X and person Y?
+== Loading the data from an sql dump via LOAD CSV
+
+If you want to follow this approach, here's how you can generate the CSV files.
+
+Get the latest dumps from: https://dumps.wikimedia.org/enwiki/latest/(the  wikipedia downloads page) and load them in a MySQL instance. You only need the following tables: category, categorylinks and page.
+
+http://stackoverflow.com/questions/21782410/finding-subcategories-of-a-wikipedia-category-using-category-and-categorylinks-t
+
+You can use my implementation->
+
+Categories:
+----
+select p.page_id as PAGE_ID, c.cat_id as CAT_ID, cast(c.cat_title as nCHAR) as CAT_TITLE , c.cat_pages as CAT_PAGES_COUNT, c.cat_subcats as CAT_SUBCAT_COUNT
+into outfile '/Users/jbarrasa/Applications/neo4j-enterprise-3.1.2/import/wiki/cats.csv' fields terminated by ',' enclosed by '"' escaped by '\\' lines terminated by '\n' 
+from test.category c, test.page p
+where c.cat_title = p.page_title
+and p.page_namespace = 14
+----
+
+Subcategory relationships:
+----
+select p.page_id as FROM_PAGE_ID, p2.page_id as TO_PAGE_ID
+into outfile '/Users/jbarrasa/Applications/neo4j-enterprise-3.1.2/import/wiki/rels.csv' fields terminated by ',' enclosed by '"' escaped by '\\' lines terminated by '\n' 
+from test.category c, test.page p , test.categorylinks l, test.category c2, test.page p2
+where l.cl_type = 'subcat'
+	  and c.cat_title = p.page_title
+      and p.page_namespace = 14
+	  and l.cl_from = p.page_id
+      and l.cl_to = c2.cat_title
+      and c2.cat_title = p2.cat_title
+      and p2.page_namespace = 14
+----
+
+== Exploring the dataset
+
+Some interesting numbers (based on precomputed counts in wikipedia dump) 
 
 [source,cypher]
 ----
-WITH "9-(905)546-2174" AS x, "0-(070)893-3322" AS y 
-MATCH p = (phone1:Phone { phoneNo: x })<-[:HAS_PHONE]-(pers1)-[:KNOWS_PHONE*]-(pers2)-[:HAS_PHONE]->(phone2:Phone {phoneNo: y })
-RETURN p LIMIT 10
-----
+MATCH (c:Category)
+return SUM(c.pageCount) AS `#pages categorised (with duplicates)`,
+	   AVG(c.pageCount) AS `average #pages per cat`, 
+       percentileCont(c.pageCount, 0.75) AS `.75p #pages in a cat`,
+	   MIN(c.pageCount) AS `min #pages in a cat`, 
+       MAX(c.pageCount) AS `max #pages in a cat`
+----	   
 
-Unusually high frequency calls in number
 
-[source,cypher]
-----
-MATCH (x)<-[:CALLER|CALLED]-(c:PhoneCall)-[:CALLER|CALLED]->(y)
-RETURN x.phoneNo AS x ,y.phoneNo AS y ,COUNT(c) AS numberOfCalls 
-ORDER BY numberOfCalls DESC LIMIT 50
-----
+== Exploring the dataset
 
-...or in duration
+Orphan nodes? 
 
 [source,cypher]
 ----
-MATCH (x)<-[:CALLER|CALLED]-(c:PhoneCall)-[:CALLER|CALLED]->(y)
-RETURN x.phoneNo AS x ,y.phoneNo AS y ,SUM(toInt(c.call_duration)) AS totalDurationOfCalls 
-LIMIT 50
+MATCH (c:Category)
+WHERE NOT (c)-[:SUBCAT_OF]-()
+RETURN COUNT(c)
 ----
 
-Use of graph algorithms to find central nodes, communities/clusters
+
+== Exploring the dataset
+
+Same analysis we did before...
 
 [source,cypher]
 ----
-...Work in progesss...
+MATCH (c:Category)
+RETURN c.catName AS category, 
+	   size((c)<-[:SUBCAT_OF]-()) AS subcatCount, 
+       size((c)-[:SUBCAT_OF]->()) AS superCatCount, 
+       size((c)-[:SUBCAT_OF]-()) AS total
+ORDER BY total DESC 
+LIMIT 500
 ----
 
+== Exploring the dataset
 
-
-== Appendix: Data load
-
-If you want to rebuild the database from the source files you'll probably want to empty it first:
-[source,cypher]
-----
-MATCH (n) DETACH DELETE n
-----
-
-Once the DB is empty, and if it's not done already, we'll want to create a few indexes to accelerate data load and initial lookups for traversal starting nodes.
-
-[source,cypher]
-----
-CREATE INDEX ON :Person(nhs_no)
-----
+Adding a 'balance index' ...and skipping the top ones
 
 [source,cypher]
 ----
-CREATE INDEX ON :Email(email_address)
+MATCH (c:Category)
+WITH c.catName AS category,        
+	 size((c)<-[:SUBCAT_OF]-()) AS subCatCount, 
+     size((c)-[:SUBCAT_OF]->()) AS superCatCount
+WHERE  subCatCount > 0 AND superCatCount > 0
+RETURN category, 
+	   ABS(toFloat(superCatCount - subCatCount)/(superCatCount + subCatCount)) as balanceIndex, 
+	   subCatCount, 
+       superCatCount
+ORDER BY balanceIndex DESC 
+SKIP 20000 LIMIT 500
+----
+
+== Exploring the dataset
+
+Global aggregates
+
+[source,cypher]
+----
+MATCH (c:Category)
+WITH c.catName AS category,        
+	 size((c)<-[:SUBCAT_OF]-()) AS subCatCount, 
+     size((c)-[:SUBCAT_OF]->()) AS superCatCount, 
+     size((c)-[:SUBCAT_OF]-()) AS total
+//WHERE  subCatCount > 0 AND superCatCount > 0
+RETURN AVG(subCatCount) AS `AVG #subcats`,
+	   MIN(subCatCount) AS `MIN #subcats`,
+       MAX(subCatCount)  AS `MAX #subcats`, 
+       percentileCont(subCatCount,0.9)  AS `.9p #subcats`,
+       AVG(superCatCount) AS `AVG #supercats`,
+       MIN(superCatCount) AS `MIN #supercats`,
+       MAX(superCatCount) AS `MAX #supercats`, 
+       percentileCont(superCatCount,0.95) AS `.9p #supercats`
+----
+
+== Loading the data from an sql dump via APOC + JDBC
+
+[source,cypher]
+----
+WITH "jdbc:mysql://localhost:3306/northwind?user=root&password=root" AS url,
+     "select c.cat_id as CAT_ID, cast(c.cat_title as CHAR) as CAT_TITLE , c.cat_pages as CAT_PAGES_COUNT, c.cat_subcats as CAT_SUBCAT_COUNT
+	  from test.category c, test.page p
+	  where c.cat_title = p.page_title
+ 	  and p.page_namespace = 14 limit 300" AS sql
+CALL apoc.load.jdbc(url,sql) YIELD row
+CREATE (c:Category { catId: row.cat_id}) 
+SET c.catName = row.CAT_TITLE, c.pageCount = toInt(row.cat_pages), c.subcatCount = toInt(row.cat_subcats)
 ----
 
 [source,cypher]
 ----
-CREATE INDEX ON :Phone(phoneNo)
+WITH "jdbc:mysql://localhost:3306/northwind?user=root&password=root" AS url,
+     "select p.page_id + 0 as FROM_PAGE_ID, p2.page_id + 0 as TO_PAGE_ID
+from test.category c, test.page p , test.categorylinks l, test.category c2, test.page p2
+where l.cl_type = 'subcat'
+	  and c.cat_title = p.page_title
+      and p.page_namespace = 14
+	  and l.cl_from = p.page_id
+      and l.cl_to = c2.cat_title
+      and c2.cat_title = p2.page_title
+      and p2.page_namespace = 14 
+      limit 100 " AS sql
+CALL apoc.load.jdbc(url,sql) YIELD row
+MATCH (from:Category { catId: row.FROM_PAGE_ID}) 
+MATCH (to:Category { catId: row.TO_PAGE_ID})
+CREATE (from)-[:SUBCAT_OF]->(to)
 ----
-
-Load data on persons
-
-[source,cypher]
-----
-USING PERIODIC COMMIT
-LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/vulnerable_people.csv" AS row
-CREATE (p:Person {nhs_no: row[0], name: row[1], surname: row[2], dob:row[7]}) 
-MERGE (a:Address { address:row[5], postcode:row[4]})
-CREATE (p)-[:CURRENT_ADDRESS]->(a)
-WITH row, p 
-WHERE row[6] IS NOT NULL 
-CREATE (f:Phone{ phoneNo:row[6]})
-CREATE (p)-[:HAS_PHONE]->(f)
-WITH row, p
-WHERE row[3] IS NOT NULL 
-CREATE (e:Email{ email_address:row[3]})
-CREATE (p)-[:HAS_EMAIL]->(e);
-----
-
-Extract postcodes and areas from addresses
-
-[source,cypher]
-----
-//Extract Postcodes And Areas
-MATCH (a:Address) 
-MERGE (p:PostCode {code: a.postcode}) 
-MERGE (a)-[:HAS_POSTCODE]->(p)
-MERGE (z:Area {areaCode: substring(a.postcode,0,3)})
-MERGE (p)-[:CODE_IN_AREA]->(z)
-MERGE (a)-[:ADDRESS_IN_AREA]->(z)
-----
-
-Load family connections
-
-[source,cypher]
-----
-USING PERIODIC COMMIT
-LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/FAMILY_DATA.csv" AS row
-MATCH (p1:Person {nhs_no: row[0]}),(p2:Person {nhs_no: row[1]})
-CREATE (p1)-[:FAMILY_REL{rel_type: row[2]}]->(p2)
-MERGE (p1)-[:KNOWS]-(p2)
-----
-
-Load data from social networks
-
-[source,cypher]
-----
-USING PERIODIC COMMIT
-LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/SOCIAL_NETWORKS.csv" AS row
-MATCH (e1:Email{ email_address:row[0]}), (e2:Email{ email_address:row[1]}), (p1)-[:HAS_EMAIL]->(e1), (p2)-[:HAS_EMAIL]->(e2)
-MERGE (p1)-[:KNOWS_SN]-(p2)
-MERGE (p1)-[:KNOWS]-(p2)
-----
-
-Load social workers reports
-
-[source,cypher]
-----
-USING PERIODIC COMMIT
-LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/SOCIAL_WORKER_REPORT_EVENTS.csv" AS row
-MATCH (p:Person {nhs_no: row[0]})
-CREATE (e:Event:SocialWorkerReportedEvent { event_category: row[4], event_desc:row[3], event_date:row[1], event_risk_score:toInt(row[2])})
-CREATE (p)<-[:REPORTED_EVENT]-(e)
-----
-
-Load police reports
-
-[source,cypher]
-----
-USING PERIODIC COMMIT
-LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/POLICE_REPORT.csv" AS row
-MATCH (p:Person {nhs_no: row[3]})
-CREATE (e:Event:PoliceReportedEvent { event_category: row[2], event_desc:row[1], event_date:row[0], event_risk_score:100*rand()})
-CREATE (p)<-[:REPORTED_EVENT]-(e)
-----
-
-Load Phone Calls from call data records (CDRs)
-
-[source,cypher]
-----
-USING PERIODIC COMMIT
-LOAD CSV FROM "https://raw.githubusercontent.com/jbarrasa/datasets/master/safeguarding/CDRs_2015.csv" AS row
-MATCH (f1:Phone{ phoneNo:row[4]}), (f2:Phone{ phoneNo:row[5]})
-CREATE (pc:PhoneCall {call_date: row[3], call_type: row[2], call_duration:row[1], call_time:row[0]}), 
-(f1)<-[:CALLER]-(pc)-[:CALLED]->(f2)
-WITH f1,f2
-MATCH (p1)-[:HAS_PHONE]->(f1), (p2)-[:HAS_PHONE]->(f2)
-MERGE (p1)-[:KNOWS_PHONE]-(p2)
-MERGE (p1)-[:KNOWS]-(p2)
-----
-
-
