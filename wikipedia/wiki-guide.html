@@ -24,7 +24,7 @@
   <carousel class="deck container-fluid">
     <!--slide class="row-fluid">
       <div class="col-sm-3">
-        <h3>Online Meetup: Building the Wikipedia Knowledge Graph in Neo4j</h3>
+        <h3>Neo4j + Wikipedia</h3>
         <p class="lead">Information</p>
 			<!dl>
 				
@@ -45,21 +45,59 @@
 
 <slide class="row-fluid">
   <div class="col-sm-12">
-    <h3>Loading a reduced subset of the Wikipedia categories</h3>
+    <h3>Building a Knowledge Graph from Wikipedia in Neo4j</h3>
     <br/>
     <div>
-      <div class="paragraph">
-<p>Get data from <a href="https://www.mediawiki.org/wiki/API:Main_page">the  MediaWiki action API</a></p>
+      <table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Categories in Wikipedia pages</strong><br>
+You may have noticed at the bottom of every Wikipedia article a section listing the categories it’s classified under.<br>
+If you open the Wikipedia page on the Neo4j, you will find the following list of categories:
+</p><p class="tableblock"><span class="image"><img src="https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/page-cat.png" alt="page" width="80%"></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Categories are organised in multiple overlaping hierarchies</strong><br>
+Every Wikipedia article will have at least one category, and categories branch into subcategories forming overlapping trees. It is sometimes possible for a category (and the Wikipedia hierarchy is an example of this) to be a subcategory of more than one parent category, so the hierarchy is effectively a graph.
+</p><p class="tableblock"><span class="image"><img src="https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/wiki-cat.png" alt="hierarchy" width="80%"></span></p></td>
+</tr>
+</tbody>
+</table>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Approach #1 : Loading a reduced subset through the MediaWiki API</h3>
+    <br/>
+    <div>
+      <table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 60%;">
+<col style="width: 40%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div></div></td>
+<td class="tableblock halign-left valign-top"><div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>The MediaWiki API</strong><br>
+Wikipedia data can be accessed through <a href="https://www.mediawiki.org/wiki/API:Main_page">the MediaWiki action API</a>. It is possible to request for a given category its subcategories or the pages it contains. The API returns results serialized as JSON that we can easily consume with the <code>load.jdbc</code> procedure in <a href="https://neo4j-contrib.github.io/neo4j-apoc-procedures">the APOC library</a>.<br>
+On the right hand side you can see the output of <a href="https://en.wikipedia.org/w/api.php?format=json&amp;action=query&amp;list=categorymembers&amp;cmtype=subcat&amp;cmtitle=Category:Databases&amp;cmprop=ids%7Ctitle&amp;cmlimit=500">this</a> request returning the subcategories of the 'Databases' category.</p>
 </div>
 <div class="paragraph">
-<p><a href="https://en.wikipedia.org/w/api.php?format=json&amp;action=query&amp;list=categorymembers&amp;cmtype=subcat&amp;cmtitle=Category:Databases&amp;cmprop=ids%7Ctitle&amp;cmlimit=500">sample request</a></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>STEP1: Prepare the DB</p>
-</li>
-</ul>
+<p><strong>Prepare the DB and create the root category</strong><br></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -71,33 +109,48 @@
 <pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">CREATE INDEX ON :Category(catName)</code></pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>STEP2: Select your root category</p>
-</li>
-</ul>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">CREATE INDEX ON :Page(pageTitle)</code></pre>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">CREATE (c:Category:RootCategory {catId: 0, catName: 'Data_mining', subcatsFetched : false, pagesFetched : false, level: 0 })</code></pre>
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">CREATE (c:Category:RootCategory {catId: 0, catName: 'Databases', subcatsFetched : false, pagesFetched : false, level: 0 })</code></pre>
 </div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>STEP3: Load n levels of categories (and pages) by iteratively calling Wikipedia&#8217;s rest API</p>
-</li>
-</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><span class="image" style="float: right"><img src="https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/mediawiki-json.png" alt="json" width="80%"></span></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Approach #1 : Loading a reduced subset incrementally through the MediaWiki API</h3>
+    <br/>
+    <div>
+      
+
+
+   <h4>Loading a three level deep hierarchy of categories</h4>
+   <div class="paragraph">
+<p>We can load an arbitrarily deep hierarchy of Wikipedia categories by iteratively generating requests to the MediaWiki API starting from the root category.</p>
 </div>
 <div class="paragraph">
-<p>Subcategory request:</p>
+<p><span class="image" style="float: right"><img src="https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/category-graph.png" alt="categories" width="300"></span></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">UNWIND range(1,4) as level
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">UNWIND range(0,3) as level
 CALL apoc.cypher.doit("
-MATCH (c:Category { subcatsFetched: false, level: $level - 1})
+MATCH (c:Category { subcatsFetched: false, level: $level})
 CALL apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&amp;action=query&amp;list=categorymembers&amp;cmtype=subcat&amp;cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&amp;cmprop=ids%7Ctitle&amp;cmlimit=500')
 YIELD value as results
 UNWIND results.query.categorymembers AS subcat
@@ -105,28 +158,46 @@ MERGE (sc:Category {catId: subcat.pageid})
 ON CREATE SET sc.catName = substring(subcat.title,9),
               sc.subcatsFetched = false,
               sc.pagesFetched = false,
-              sc.level = $level
+              sc.level = $level + 1
 WITH sc,c
-CALL apoc.create.addLabels(sc,['Level' + $level + 'Category']) YIELD node
+CALL apoc.create.addLabels(sc,['Level' +  ($level + 1) + 'Category']) YIELD node
 MERGE (sc)-[:SUBCAT_OF]-&gt;(c)
 WITH DISTINCT c
 SET c.subcatsFetched = true", { level: level }) YIELD value
 RETURN value</code></pre>
 </div>
 </div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Approach #1 : Loading a reduced subset incrementally through the MediaWiki API</h3>
+    <br/>
+    <div>
+      
+
+
+   <h4>Loading pages for each category in the graph by level</h4>
+   <div class="paragraph">
+<p>Similarly, we can load the Wikipedia pages for each of the categories in the Graph. Notice that at this point we are only loading the page id, its url and its title.</p>
+</div>
 <div class="paragraph">
-<p>Page request:</p>
+<p><span class="image" style="float: right"><img src="https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/page-graph.png" alt="pages" width="300"></span></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">UNWIND range(1,4) as level
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">UNWIND range(0,4) as level
 CALL apoc.cypher.doit("
-MATCH (c:Category { pagesFetched: false, level: $level - 1})
+MATCH (c:Category { pagesFetched: false, level: $level })
 CALL apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&amp;action=query&amp;list=categorymembers&amp;cmtype=page&amp;cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&amp;cmprop=ids%7Ctitle&amp;cmlimit=500')
 YIELD value as results
 UNWIND results.query.categorymembers AS page
 MERGE (p:Page {pageId: page.pageid})
-ON CREATE SET p.pageTitle = page.title, p.pageUrl = 'http://en.wikipedia.org/wiki/' + replace(page.title, ' ', '_')
+ON CREATE SET p.pageTitle = page.title, p.pageUrl = 'http://en.wikipedia.org/wiki/' + apoc.text.urlencode(replace(page.title, ' ', '_'))
 WITH p,c
 MERGE (p)-[:IN_CATEGORY]-&gt;(c)
 WITH DISTINCT c
@@ -145,47 +216,62 @@ return value</code></pre>
     <h3>Enriching the knowledge graph with DBPedia data</h3>
     <br/>
     <div>
-      <div class="paragraph">
-<p>Wikipedia&#8217;s api does not expose the content of the pages, but DBpedia does, at least the abstract.</p>
+      <table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 70%;">
+<col style="width: 30%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div></div></td>
+<td class="tableblock halign-left valign-top"><div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>The MediaWiki API does not expose the content of the pages, but <a href="http://wiki.dbpedia.org/">DBpedia</a> does to a certain extent. DBpedia is a crowd-sourced community effort to extract structured information from Wikipedia and make this information available on the Web.<br>
+There is a public instance of the DBpedia that exposes a <a href="http://dbpedia.org/sparql/">SPARQL endpoint</a> that we can query to get an abstract for a given Wikipedia page.
+Here is the SPARQL query that we will use:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH (p:Page)
-WITH
-"SELECT ?label
+<pre>SELECT ?label
+WHERE  {
+	?x  &lt;http://xmlns.com/foaf/0.1/isPrimaryTopicOf&gt; &lt;...wiki page url...&gt; ;
+		&lt;http://dbpedia.org/ontology/abstract&gt; ?label .
+	FILTER(LANGMATCHES(LANG(?label), 'en'))
+	} LIMIT 1</pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><span class="image"><img src="https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/dbpedia.png" alt="dbpedia" width="90%"></span></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>We&#8217;ll submit the query to the endpoint and get the results as JSON and we&#8217;ll do this again with APOC&#8217;s <code>load.json</code> procedure. The results will enrich our knowledge graph by adding the abstract as a property of <code>Page</code> nodes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">WITH "SELECT ?label
  WHERE  {
- 			?x &lt;http://xmlns.com/foaf/0.1/isPrimaryTopicOf&gt; &lt;"  + p.pageUrl  + "&gt; ;
-               &lt;http://dbpedia.org/ontology/abstract&gt; ?label .
-            FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en')) } LIMIT 1
-        " AS sparql, p
-CALL apoc.load.json('http://dbpedia.org/sparql/?query=' + apoc.text.urlencode(sparql) + '&amp;format=application%2Fsparql-results%2Bjson') WIELD value
-SET p.abstract = value.results.bindings[0].label.value</code></pre>
+         ?x &lt;http://xmlns.com/foaf/0.1/isPrimaryTopicOf&gt; &lt;@wikiurl@&gt; ;
+            &lt;http://dbpedia.org/ontology/abstract&gt; ?label .
+         FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en')) } LIMIT 1
+         " AS sparqlPattern
+UNWIND range(0,3) as level
+CALL apoc.cypher.doit("
+MATCH (c:Category { level: $level })&lt;-[:IN_CATEGORY]-(p:Page)
+WHERE NOT exists(p.abstract)
+WITH DISTINCT p, apoc.text.replace(sparqlPattern,'@wikiurl@',p.pageUrl) as runnableSparql LIMIT 100
+CALL apoc.load.json('http://dbpedia.org/sparql/?query=' + apoc.text.urlencode(runnableSparql) + '&amp;format=application%2Fsparql-results%2Bjson') YIELD value
+SET p.abstract = value.results.bindings[0].label.value
+", { level: level, sparqlPattern: sparqlPattern }) yield value
+return value</code></pre>
 </div>
 </div>
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Exploring the dataset</h3>
-    <br/>
-    <div>
-      <div class="paragraph">
-<p>Biggest categories&#8230;&#8203;</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH (c:Category)
-RETURN c.catName AS category,
-	   size((c)&lt;-[:SUBCAT_OF]-()) AS subcatCount,
-       size((c)-[:SUBCAT_OF]-&gt;()) AS superCatCount,
-       size((c)-[:SUBCAT_OF]-()) AS total
-ORDER BY total DESC
-LIMIT 500</code></pre>
-</div>
+<div class="paragraph">
+<p>Notice that the number of pages is limited to 100 per level because we are generating an HTTP request to the DBpedia endpoint for each Page node in our graph. Feel free to remove this limit but keep in mind that this can take a while.</p>
 </div>
 	</div>
   </div>
@@ -199,36 +285,7 @@ LIMIT 500</code></pre>
     <br/>
     <div>
       <div class="paragraph">
-<p>Adding a 'balance index'</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH (c:Category)
-WITH c.catName AS category,
-	 size((c)&lt;-[:SUBCAT_OF]-()) AS subCatCount,
-     size((c)-[:SUBCAT_OF]-&gt;()) AS superCatCount
-WHERE  subCatCount &gt; 0 AND superCatCount &gt; 0
-RETURN category,
-	   ABS(toFloat(superCatCount - subCatCount)/(superCatCount + subCatCount)) as balanceIndex,
-	   subCatCount,
-       superCatCount
-ORDER BY balanceIndex DESC
-LIMIT 500</code></pre>
-</div>
-</div>
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Exploring the dataset</h3>
-    <br/>
-    <div>
-      <div class="paragraph">
-<p>Aggregates&#8230;&#8203;</p>
+<p>We can list categories by number of sub/super categories or by number of pages or even create custom indexes like <code>ABS(toFloat(superCatCount - subCatCount)/(superCatCount + subCatCount))</code> that tells us how 'balanced' (ratio between supercategories and subcategories) a category is. Closer to zero are the more balanced categories and closer to one are the more unbalanced.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -236,12 +293,36 @@ LIMIT 500</code></pre>
 WITH c.catName AS category,
 	 size((c)&lt;-[:SUBCAT_OF]-()) AS subCatCount,
      size((c)-[:SUBCAT_OF]-&gt;()) AS superCatCount,
+	 size((c)&lt;-[:IN_CATEGORY]-()) AS pageCount
+WHERE  subCatCount &gt; 0 AND superCatCount &gt; 0
+RETURN category,
+	   pageCount,
+	   subCatCount,
+       superCatCount,
+	   ABS(toFloat(superCatCount - subCatCount)/(superCatCount + subCatCount)) as balanceIndex
+ORDER BY subCatCount DESC
+LIMIT 500</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can also aggregate these values to produce stats.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH (c:Category)
+WITH c.catName AS category,
+	 size((c)&lt;-[:SUBCAT_OF]-()) AS subCatCount,
+     size((c)-[:SUBCAT_OF]-&gt;()) AS superCatCount,
+     size((c)&lt;-[:IN_CATEGORY]-()) AS pageCount,
      size((c)-[:SUBCAT_OF]-()) AS total
-//WHERE  subCatCount &gt; 0 AND superCatCount &gt; 0
 RETURN AVG(subCatCount) AS `AVG #subcats`,
 	   MIN(subCatCount) AS `MIN #subcats`,
        MAX(subCatCount)  AS `MAX #subcats`,
        percentileCont(subCatCount,0.9)  AS `.9p #subcats`,
+       AVG(pageCount) AS `AVG #pages`,
+       MIN(pageCount) AS `MIN #pages`,
+       MAX(pageCount) AS `MAX #pages`,
+       percentileCont(pageCount,0.95) AS `.9p #pages`,
        AVG(superCatCount) AS `AVG #supercats`,
        MIN(superCatCount) AS `MIN #supercats`,
        MAX(superCatCount) AS `MAX #supercats`,
@@ -260,46 +341,27 @@ RETURN AVG(subCatCount) AS `AVG #subcats`,
     <br/>
     <div>
       <div class="paragraph">
-<p>What is the hierachy connecting DBs and Google Doodles?</p>
+<p><span class="image" style="float: right"><img src="https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/wiki-long-path.png" alt="path" width="300"></span></p>
+</div>
+<div class="paragraph">
+<p>How are Quantone and Monster.com connected in the Wikipedia hierarchy?</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH shortestFullHierarchy = shortestPath((doodles:Category {catName : 'Google Doodles'})-[:SUBCAT_OF*]-&gt;(root:RootCategory))
-RETURN shortestFullHierarchy</code></pre>
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH shortestHierarchyConnection = shortestPath((q:Page { pageTitle : 'Quantone'})-[:IN_CATEGORY|SUBCAT_OF*]-(m:Page { pageTitle : 'Monster.com'}))
+RETURN shortestHierarchyConnection</code></pre>
 </div>
 </div>
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Exploring the dataset</h3>
-    <br/>
-    <div>
-      <div class="paragraph">
-<p>Some unexpectedly(?) long hierarchies</p>
+<div class="paragraph">
+<p>Some unexpectedly(?) long hierarchies. How can a path of lenght 7 exist if we&#8217;ve only loaded a 4 level deep hierarchy? Here&#8217;s how:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH path =()-[r:SUBCAT_OF*10..]-&gt;() WITH path LIMIT 1
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH path =()-[r:SUBCAT_OF*7..]-&gt;() WITH path LIMIT 1
 return path</code></pre>
 </div>
 </div>
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Exploring the dataset</h3>
-    <br/>
-    <div>
-      <div class="paragraph">
+<div class="paragraph">
 <p>Loops!</p>
 </div>
 <div class="listingblock">
@@ -316,16 +378,19 @@ RETURN loop LIMIT 1</code></pre>
 
 <slide class="row-fluid">
   <div class="col-sm-12">
-    <h3>Loading the data from an sql dump via LOAD CSV</h3>
+    <h3>Approach #2 : Batch loading the data with LOAD CSV from an SQL dump</h3>
     <br/>
     <div>
       <div class="paragraph">
-<p>First load the categories</p>
+<p>There is a snapshot of the Wikipedia categories and their hierarchical relationships (as of mid April 2017) <a href="https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/">here</a>. It contains 1.4 million categories and 4 million hierarchical relationships. They can both be loaded into Neo4j using <code>LOAD CSV</code>. You can run the queries as they are or download the files to your Neo4j&#8217;s instance <code>import</code> directory and use <code>LOAD CSV FROM "file:///&#8230;&#8203;"</code> instead.</p>
+</div>
+<div class="paragraph">
+<p>First the categories. Notice that we are loading a couple of extra properties in the Category nodes: the pageCount and the subcatCount. These numbers are a precomputed in the data dump and not always accurate.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">using periodic commit 10000
-load csv from "https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/cats.csv?raw=true" as row
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">USING PERIODIC COMMIT 10000
+LOAD CSV FROM "https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/cats.csv?raw=true" AS row
 CREATE (c:Category { catId: row[0]})
 SET c.catName = row[2], c.pageCount = toInt(row[3]), c.subcatCount = toInt(row[4])</code></pre>
 </div>
@@ -335,8 +400,8 @@ SET c.catName = row[2], c.pageCount = toInt(row[3]), c.subcatCount = toInt(row[4
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">using periodic commit 10000
-load csv from "https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/rels.csv?raw=true" as row
+<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">USING PERIODIC COMMIT 10000
+LOAD CSV FROM "https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/rels.csv?raw=true" AS row
 MATCH (from:Category { catId: row[0]})
 MATCH (to:Category { catId: row[1]})
 CREATE (from)-[:SUBCAT_OF]-&gt;(to)</code></pre>
@@ -350,23 +415,25 @@ CREATE (from)-[:SUBCAT_OF]-&gt;(to)</code></pre>
 
 <slide class="row-fluid">
   <div class="col-sm-12">
-    <h3>Loading the data from an sql dump via LOAD CSV</h3>
+    <h3>Approach #2 : Batch loading the data with LOAD CSV from an SQL dump</h3>
     <br/>
     <div>
       <div class="paragraph">
-<p>If you want to follow this approach, here&#8217;s how you can generate the CSV files.</p>
+<p>If you&#8217;re interested in regenerating fresh CSV files, here&#8217;s how:</p>
 </div>
-<div class="paragraph">
-<p>Get the latest dumps from: <a href="https://dumps.wikimedia.org/enwiki/latest/(the" class="bare">https://dumps.wikimedia.org/enwiki/latest/(the</a>  wikipedia downloads page) and load them in a MySQL instance. You only need the following tables: category, categorylinks and page.</p>
-</div>
-<div class="paragraph">
-<p><a href="http://stackoverflow.com/questions/21782410/finding-subcategories-of-a-wikipedia-category-using-category-and-categorylinks-t" class="bare">http://stackoverflow.com/questions/21782410/finding-subcategories-of-a-wikipedia-category-using-category-and-categorylinks-t</a></p>
-</div>
-<div class="paragraph">
-<p>You can use my implementation&#8594;</p>
-</div>
-<div class="paragraph">
-<p>Categories:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Start by downloading the latest DB dumps from <a href="https://dumps.wikimedia.org/enwiki/latest/">the  wikipedia downloads page</a>.
+For the category hierarchy, you&#8217;ll only need the following tables: category, categorylinks and page.</p>
+</li>
+<li>
+<p>Load them in your DBMS.</p>
+</li>
+<li>
+<p>Generate the categories CSV file by running the following SQL</p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -377,8 +444,12 @@ where c.cat_title = p.page_title
 and p.page_namespace = 14</pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Subcategory relationships:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Generate the relationships file by running the following SQL</p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -406,7 +477,7 @@ where l.cl_type = 'subcat'
     <br/>
     <div>
       <div class="paragraph">
-<p>Some interesting numbers (based on precomputed counts in wikipedia dump)</p>
+<p>The same analysis run in the first approach can be applied to the full hierarchy. However there are a couple of interesting queries that will only make sense on the full hierarchy. The first one is the stats on the number of pages per category based on precomputed counts available in the Wikipedia dump.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -418,153 +489,14 @@ return SUM(c.pageCount) AS `#pages categorised (with duplicates)`,
        MAX(c.pageCount) AS `max #pages in a cat`</code></pre>
 </div>
 </div>
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Exploring the dataset</h3>
-    <br/>
-    <div>
-      <div class="paragraph">
-<p>Orphan nodes?</p>
+<div class="paragraph">
+<p>Also, the full export contains some orphan nodes. Probably unmaintained/migrated categories? Here is how to get the number of orphan nodes:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH (c:Category)
 WHERE NOT (c)-[:SUBCAT_OF]-()
 RETURN COUNT(c)</code></pre>
-</div>
-</div>
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Exploring the dataset</h3>
-    <br/>
-    <div>
-      <div class="paragraph">
-<p>Same analysis we did before&#8230;&#8203;</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH (c:Category)
-RETURN c.catName AS category,
-	   size((c)&lt;-[:SUBCAT_OF]-()) AS subcatCount,
-       size((c)-[:SUBCAT_OF]-&gt;()) AS superCatCount,
-       size((c)-[:SUBCAT_OF]-()) AS total
-ORDER BY total DESC
-LIMIT 500</code></pre>
-</div>
-</div>
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Exploring the dataset</h3>
-    <br/>
-    <div>
-      <div class="paragraph">
-<p>Adding a 'balance index' &#8230;&#8203;and skipping the top ones</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH (c:Category)
-WITH c.catName AS category,
-	 size((c)&lt;-[:SUBCAT_OF]-()) AS subCatCount,
-     size((c)-[:SUBCAT_OF]-&gt;()) AS superCatCount
-WHERE  subCatCount &gt; 0 AND superCatCount &gt; 0
-RETURN category,
-	   ABS(toFloat(superCatCount - subCatCount)/(superCatCount + subCatCount)) as balanceIndex,
-	   subCatCount,
-       superCatCount
-ORDER BY balanceIndex DESC
-SKIP 20000 LIMIT 500</code></pre>
-</div>
-</div>
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Exploring the dataset</h3>
-    <br/>
-    <div>
-      <div class="paragraph">
-<p>Global aggregates</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">MATCH (c:Category)
-WITH c.catName AS category,
-	 size((c)&lt;-[:SUBCAT_OF]-()) AS subCatCount,
-     size((c)-[:SUBCAT_OF]-&gt;()) AS superCatCount,
-     size((c)-[:SUBCAT_OF]-()) AS total
-//WHERE  subCatCount &gt; 0 AND superCatCount &gt; 0
-RETURN AVG(subCatCount) AS `AVG #subcats`,
-	   MIN(subCatCount) AS `MIN #subcats`,
-       MAX(subCatCount)  AS `MAX #subcats`,
-       percentileCont(subCatCount,0.9)  AS `.9p #subcats`,
-       AVG(superCatCount) AS `AVG #supercats`,
-       MIN(superCatCount) AS `MIN #supercats`,
-       MAX(superCatCount) AS `MAX #supercats`,
-       percentileCont(superCatCount,0.95) AS `.9p #supercats`</code></pre>
-</div>
-</div>
-	</div>
-  </div>
-</slide>
-
-
-
-<slide class="row-fluid">
-  <div class="col-sm-12">
-    <h3>Loading the data from an sql dump via APOC + JDBC</h3>
-    <br/>
-    <div>
-      <div class="listingblock">
-<div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">WITH "jdbc:mysql://localhost:3306/northwind?user=root&amp;password=root" AS url,
-     "select c.cat_id as CAT_ID, cast(c.cat_title as CHAR) as CAT_TITLE , c.cat_pages as CAT_PAGES_COUNT, c.cat_subcats as CAT_SUBCAT_COUNT
-	  from test.category c, test.page p
-	  where c.cat_title = p.page_title
- 	  and p.page_namespace = 14 limit 300" AS sql
-CALL apoc.load.jdbc(url,sql) YIELD row
-CREATE (c:Category { catId: row.cat_id})
-SET c.catName = row.CAT_TITLE, c.pageCount = toInt(row.cat_pages), c.subcatCount = toInt(row.cat_subcats)</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">WITH "jdbc:mysql://localhost:3306/northwind?user=root&amp;password=root" AS url,
-     "select p.page_id + 0 as FROM_PAGE_ID, p2.page_id + 0 as TO_PAGE_ID
-from test.category c, test.page p , test.categorylinks l, test.category c2, test.page p2
-where l.cl_type = 'subcat'
-	  and c.cat_title = p.page_title
-      and p.page_namespace = 14
-	  and l.cl_from = p.page_id
-      and l.cl_to = c2.cat_title
-      and c2.cat_title = p2.page_title
-      and p2.page_namespace = 14
-      limit 100 " AS sql
-CALL apoc.load.jdbc(url,sql) YIELD row
-MATCH (from:Category { catId: row.FROM_PAGE_ID})
-MATCH (to:Category { catId: row.TO_PAGE_ID})
-CREATE (from)-[:SUBCAT_OF]-&gt;(to)</code></pre>
 </div>
 </div>
 	</div>

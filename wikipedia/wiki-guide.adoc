@@ -1,12 +1,32 @@
-= Online Meetup: Building the Wikipedia Knowledge Graph in Neo4j
+= Neo4j + Wikipedia
 
-== Loading a reduced subset of the Wikipedia categories
+== Building a Knowledge Graph from Wikipedia in Neo4j
 
-Get data from https://www.mediawiki.org/wiki/API:Main_page[the  MediaWiki action API]
+[cols="1,1"]
+|===
+||
+| *Categories in Wikipedia pages* +
+You may have noticed at the bottom of every Wikipedia article a section listing the categories it’s classified under. +
+If you open the Wikipedia page on the Neo4j, you will find the following list of categories:
 
-https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:Databases&cmprop=ids%7Ctitle&cmlimit=500[sample request]
+image:https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/page-cat.png[page,'80%']
 
-* STEP1: Prepare the DB
+| *Categories are organised in multiple overlaping hierarchies* +
+Every Wikipedia article will have at least one category, and categories branch into subcategories forming overlapping trees. It is sometimes possible for a category (and the Wikipedia hierarchy is an example of this) to be a subcategory of more than one parent category, so the hierarchy is effectively a graph.
+
+image:https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/wiki-cat.png[hierarchy,'80%']
+|===
+
+== Approach #1 : Loading a reduced subset through the MediaWiki API
+
+[cols="6a,4a"]
+|===
+||
+| *The MediaWiki API* +
+Wikipedia data can be accessed through https://www.mediawiki.org/wiki/API:Main_page[the MediaWiki action API]. It is possible to request for a given category its subcategories or the pages it contains. The API returns results serialized as JSON that we can easily consume with the `load.jdbc` procedure in https://neo4j-contrib.github.io/neo4j-apoc-procedures[the APOC library]. +
+On the right hand side you can see the output of https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:Databases&cmprop=ids%7Ctitle&cmlimit=500[this] request returning the subcategories of the 'Databases' category. 
+
+*Prepare the DB and create the root category* +
 
 [source,cypher]
 ----
@@ -18,22 +38,34 @@ CREATE INDEX ON :Category(catId)
 CREATE INDEX ON :Category(catName)
 ----
 
-* STEP2: Select your root category
+[source,cypher]
+----
+CREATE INDEX ON :Page(pageTitle)
+----
 
 [source,cypher]
 ----
-CREATE (c:Category:RootCategory {catId: 0, catName: 'Data_mining', subcatsFetched : false, pagesFetched : false, level: 0 })
+CREATE (c:Category:RootCategory {catId: 0, catName: 'Databases', subcatsFetched : false, pagesFetched : false, level: 0 })
 ----
 
-* STEP3: Load n levels of categories (and pages) by iteratively calling Wikipedia's rest API
+|
+image:https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/mediawiki-json.png[json,'80%',float=right]
 
-Subcategory request:
+|===
+
+
+== Approach #1 : Loading a reduced subset incrementally through the MediaWiki API
+
+=== Loading a three level deep hierarchy of categories 
+We can load an arbitrarily deep hierarchy of Wikipedia categories by iteratively generating requests to the MediaWiki API starting from the root category.
+
+image:https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/category-graph.png[categories,300,float=right]
 
 [source,cypher]
 ----
-UNWIND range(1,4) as level 
+UNWIND range(0,3) as level 
 CALL apoc.cypher.doit("
-MATCH (c:Category { subcatsFetched: false, level: $level - 1})
+MATCH (c:Category { subcatsFetched: false, level: $level})
 CALL apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&cmprop=ids%7Ctitle&cmlimit=500')
 YIELD value as results
 UNWIND results.query.categorymembers AS subcat
@@ -41,27 +73,33 @@ MERGE (sc:Category {catId: subcat.pageid})
 ON CREATE SET sc.catName = substring(subcat.title,9),
               sc.subcatsFetched = false,
               sc.pagesFetched = false,
-              sc.level = $level
+              sc.level = $level + 1
 WITH sc,c
-CALL apoc.create.addLabels(sc,['Level' + $level + 'Category']) YIELD node
+CALL apoc.create.addLabels(sc,['Level' +  ($level + 1) + 'Category']) YIELD node
 MERGE (sc)-[:SUBCAT_OF]->(c)
 WITH DISTINCT c
 SET c.subcatsFetched = true", { level: level }) YIELD value
 RETURN value
 ----
 
-Page request:
+== Approach #1 : Loading a reduced subset incrementally through the MediaWiki API
+
+=== Loading pages for each category in the graph by level
+
+Similarly, we can load the Wikipedia pages for each of the categories in the Graph. Notice that at this point we are only loading the page id, its url and its title.
+
+image:https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/page-graph.png[pages,300,float=right]
 
 [source,cypher]
 ----
-UNWIND range(1,4) as level 
+UNWIND range(0,4) as level 
 CALL apoc.cypher.doit("
-MATCH (c:Category { pagesFetched: false, level: $level - 1})
+MATCH (c:Category { pagesFetched: false, level: $level })
 CALL apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=page&cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&cmprop=ids%7Ctitle&cmlimit=500')
 YIELD value as results
 UNWIND results.query.categorymembers AS page
 MERGE (p:Page {pageId: page.pageid})
-ON CREATE SET p.pageTitle = page.title, p.pageUrl = 'http://en.wikipedia.org/wiki/' + replace(page.title, ' ', '_')
+ON CREATE SET p.pageTitle = page.title, p.pageUrl = 'http://en.wikipedia.org/wiki/' + apoc.text.urlencode(replace(page.title, ' ', '_'))
 WITH p,c
 MERGE (p)-[:IN_CATEGORY]->(c)
 WITH DISTINCT c
@@ -70,99 +108,113 @@ return value
 ----
 
 == Enriching the knowledge graph with DBPedia data
-Wikipedia's api does not expose the content of the pages, but DBpedia does, at least the abstract.
+
+[cols="7a,3a"]
+|===
+||
+| The MediaWiki API does not expose the content of the pages, but http://wiki.dbpedia.org/[DBpedia] does to a certain extent. DBpedia is a crowd-sourced community effort to extract structured information from Wikipedia and make this information available on the Web. +
+There is a public instance of the DBpedia that exposes a http://dbpedia.org/sparql/[SPARQL endpoint] that we can query to get an abstract for a given Wikipedia page. 
+Here is the SPARQL query that we will use:
+----
+SELECT ?label 
+WHERE  { 
+	?x  <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> <...wiki page url...> ; 
+		<http://dbpedia.org/ontology/abstract> ?label .
+	FILTER(LANGMATCHES(LANG(?label), 'en')) 
+	} LIMIT 1
+----
+|image:https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/dbpedia.png[dbpedia,'90%',align="top"]
+
+|===
+
+We'll submit the query to the endpoint and get the results as JSON and we'll do this again with APOC's `load.json` procedure. The results will enrich our knowledge graph by adding the abstract as a property of `Page` nodes. 
+
 [source,cypher]
 ----
-MATCH (p:Page) 
-WITH 
-"SELECT ?label 
- WHERE  { 
- 			?x <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> <"  + p.pageUrl  + "> ; 
-               <http://dbpedia.org/ontology/abstract> ?label .
-            FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en')) } LIMIT 1
-        " AS sparql, p
-CALL apoc.load.json('http://dbpedia.org/sparql/?query=' + apoc.text.urlencode(sparql) + '&format=application%2Fsparql-results%2Bjson') WIELD value
+WITH "SELECT ?label
+ WHERE  {
+         ?x <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> <@wikiurl@> ;
+            <http://dbpedia.org/ontology/abstract> ?label .
+         FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en')) } LIMIT 1
+         " AS sparqlPattern
+UNWIND range(0,3) as level
+CALL apoc.cypher.doit("
+MATCH (c:Category { level: $level })<-[:IN_CATEGORY]-(p:Page)
+WHERE NOT exists(p.abstract) 
+WITH DISTINCT p, apoc.text.replace(sparqlPattern,'@wikiurl@',p.pageUrl) as runnableSparql LIMIT 100
+CALL apoc.load.json('http://dbpedia.org/sparql/?query=' + apoc.text.urlencode(runnableSparql) + '&format=application%2Fsparql-results%2Bjson') YIELD value
 SET p.abstract = value.results.bindings[0].label.value
+", { level: level, sparqlPattern: sparqlPattern }) yield value
+return value
 ----
+
+Notice that the number of pages is limited to 100 per level because we are generating an HTTP request to the DBpedia endpoint for each Page node in our graph. Feel free to remove this limit but keep in mind that this can take a while.
 
 == Exploring the dataset
 
-Biggest categories...
-
-[source,cypher]
-----
-MATCH (c:Category)
-RETURN c.catName AS category, 
-	   size((c)<-[:SUBCAT_OF]-()) AS subcatCount, 
-       size((c)-[:SUBCAT_OF]->()) AS superCatCount, 
-       size((c)-[:SUBCAT_OF]-()) AS total
-ORDER BY total DESC 
-LIMIT 500
-----
-
-== Exploring the dataset
-
-Adding a 'balance index'
+We can list categories by number of sub/super categories or by number of pages or even create custom indexes like `ABS(toFloat(superCatCount - subCatCount)/(superCatCount + subCatCount))` that tells us how 'balanced' (ratio between supercategories and subcategories) a category is. Closer to zero are the more balanced categories and closer to one are the more unbalanced.
 
 [source,cypher]
 ----
 MATCH (c:Category)
 WITH c.catName AS category,        
 	 size((c)<-[:SUBCAT_OF]-()) AS subCatCount, 
-     size((c)-[:SUBCAT_OF]->()) AS superCatCount
+     size((c)-[:SUBCAT_OF]->()) AS superCatCount,
+	 size((c)<-[:IN_CATEGORY]-()) AS pageCount
 WHERE  subCatCount > 0 AND superCatCount > 0
 RETURN category, 
-	   ABS(toFloat(superCatCount - subCatCount)/(superCatCount + subCatCount)) as balanceIndex, 
+	   pageCount, 
 	   subCatCount, 
-       superCatCount
-ORDER BY balanceIndex DESC 
+       superCatCount,
+	   ABS(toFloat(superCatCount - subCatCount)/(superCatCount + subCatCount)) as balanceIndex
+ORDER BY subCatCount DESC 
 LIMIT 500
 ----
 
-== Exploring the dataset
-
-Aggregates...
+We can also aggregate these values to produce stats.
 
 [source,cypher]
 ----
 MATCH (c:Category)
-WITH c.catName AS category,        
-	 size((c)<-[:SUBCAT_OF]-()) AS subCatCount, 
-     size((c)-[:SUBCAT_OF]->()) AS superCatCount, 
+WITH c.catName AS category,
+	 size((c)<-[:SUBCAT_OF]-()) AS subCatCount,
+     size((c)-[:SUBCAT_OF]->()) AS superCatCount,
+     size((c)<-[:IN_CATEGORY]-()) AS pageCount,
      size((c)-[:SUBCAT_OF]-()) AS total
-//WHERE  subCatCount > 0 AND superCatCount > 0
 RETURN AVG(subCatCount) AS `AVG #subcats`,
 	   MIN(subCatCount) AS `MIN #subcats`,
-       MAX(subCatCount)  AS `MAX #subcats`, 
+       MAX(subCatCount)  AS `MAX #subcats`,
        percentileCont(subCatCount,0.9)  AS `.9p #subcats`,
+       AVG(pageCount) AS `AVG #pages`,
+       MIN(pageCount) AS `MIN #pages`,
+       MAX(pageCount) AS `MAX #pages`,
+       percentileCont(pageCount,0.95) AS `.9p #pages`,
        AVG(superCatCount) AS `AVG #supercats`,
        MIN(superCatCount) AS `MIN #supercats`,
-       MAX(superCatCount) AS `MAX #supercats`, 
+       MAX(superCatCount) AS `MAX #supercats`,
        percentileCont(superCatCount,0.95) AS `.9p #supercats`
 ----
 
 
 == Exploring the dataset
 
-What is the hierachy connecting DBs and Google Doodles?
+image:https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/wiki-long-path.png[path,300,float=right]
+
+How are Quantone and Monster.com connected in the Wikipedia hierarchy?
 
 [source,cypher]
 ----
-MATCH shortestFullHierarchy = shortestPath((doodles:Category {catName : 'Google Doodles'})-[:SUBCAT_OF*]->(root:RootCategory)) 
-RETURN shortestFullHierarchy
+MATCH shortestHierarchyConnection = shortestPath((q:Page { pageTitle : 'Quantone'})-[:IN_CATEGORY|SUBCAT_OF*]-(m:Page { pageTitle : 'Monster.com'}))
+RETURN shortestHierarchyConnection
 ----
 
-== Exploring the dataset
-
-Some unexpectedly(?) long hierarchies
+Some unexpectedly(?) long hierarchies. How can a path of lenght 7 exist if we've only loaded a 4 level deep hierarchy? Here's how:
 
 [source,cypher]
 ----
-MATCH path =()-[r:SUBCAT_OF*10..]->() WITH path LIMIT 1
+MATCH path =()-[r:SUBCAT_OF*7..]->() WITH path LIMIT 1
 return path
 ----
-
-== Exploring the dataset
 
 Loops!
 
@@ -172,14 +224,16 @@ MATCH loop = (cat)-[r:SUBCAT_OF*]->(cat)
 RETURN loop LIMIT 1
 ----
 
-== Loading the data from an sql dump via LOAD CSV
+== Approach #2 : Batch loading the data with LOAD CSV from an SQL dump
 
-First load the categories
+There is a snapshot of the Wikipedia categories and their hierarchical relationships (as of mid April 2017) https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/[here]. It contains 1.4 million categories and 4 million hierarchical relationships. They can both be loaded into Neo4j using `LOAD CSV`. You can run the queries as they are or download the files to your Neo4j's instance `import` directory and use `LOAD CSV FROM "file:///..."` instead.
+
+First the categories. Notice that we are loading a couple of extra properties in the Category nodes: the pageCount and the subcatCount. These numbers are a precomputed in the data dump and not always accurate.
 
 [source,cypher]
 ----
-using periodic commit 10000
-load csv from "https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/cats.csv?raw=true" as row
+USING PERIODIC COMMIT 10000
+LOAD CSV FROM "https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/cats.csv?raw=true" AS row
 CREATE (c:Category { catId: row[0]}) 
 SET c.catName = row[2], c.pageCount = toInt(row[3]), c.subcatCount = toInt(row[4])
 ----
@@ -188,34 +242,32 @@ And then the subcategory relationships
 
 [source,cypher]
 ----
-using periodic commit 10000
-load csv from "https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/rels.csv?raw=true" as row
+USING PERIODIC COMMIT 10000
+LOAD CSV FROM "https://github.com/jbarrasa/datasets/blob/master/wikipedia/data/rels.csv?raw=true" AS row
 MATCH (from:Category { catId: row[0]}) 
 MATCH (to:Category { catId: row[1]})
 CREATE (from)-[:SUBCAT_OF]->(to)
 ----
 
 
-== Loading the data from an sql dump via LOAD CSV
+== Approach #2 : Batch loading the data with LOAD CSV from an SQL dump
 
-If you want to follow this approach, here's how you can generate the CSV files.
+If you're interested in regenerating fresh CSV files, here's how:
 
-Get the latest dumps from: https://dumps.wikimedia.org/enwiki/latest/(the  wikipedia downloads page) and load them in a MySQL instance. You only need the following tables: category, categorylinks and page.
+* Start by downloading the latest DB dumps from https://dumps.wikimedia.org/enwiki/latest/[the  wikipedia downloads page]. 
+For the category hierarchy, you'll only need the following tables: category, categorylinks and page.
 
-http://stackoverflow.com/questions/21782410/finding-subcategories-of-a-wikipedia-category-using-category-and-categorylinks-t
+* Load them in your DBMS.  
 
-You can use my implementation->
-
-Categories:
+* Generate the categories CSV file by running the following SQL
 ----
 select p.page_id as PAGE_ID, c.cat_id as CAT_ID, cast(c.cat_title as nCHAR) as CAT_TITLE , c.cat_pages as CAT_PAGES_COUNT, c.cat_subcats as CAT_SUBCAT_COUNT
 into outfile '/Users/jbarrasa/Applications/neo4j-enterprise-3.1.2/import/wiki/cats.csv' fields terminated by ',' enclosed by '"' escaped by '\\' lines terminated by '\n' 
 from test.category c, test.page p
 where c.cat_title = p.page_title
-and p.page_namespace = 14
+and p.page_namespace = 14  
 ----
-
-Subcategory relationships:
+* Generate the relationships file by running the following SQL
 ----
 select p.page_id as FROM_PAGE_ID, p2.page_id as TO_PAGE_ID
 into outfile '/Users/jbarrasa/Applications/neo4j-enterprise-3.1.2/import/wiki/rels.csv' fields terminated by ',' enclosed by '"' escaped by '\\' lines terminated by '\n' 
@@ -229,9 +281,10 @@ where l.cl_type = 'subcat'
       and p2.page_namespace = 14
 ----
 
+
 == Exploring the dataset
 
-Some interesting numbers (based on precomputed counts in wikipedia dump) 
+The same analysis run in the first approach can be applied to the full hierarchy. However there are a couple of interesting queries that will only make sense on the full hierarchy. The first one is the stats on the number of pages per category based on precomputed counts available in the Wikipedia dump.
 
 [source,cypher]
 ----
@@ -243,10 +296,7 @@ return SUM(c.pageCount) AS `#pages categorised (with duplicates)`,
        MAX(c.pageCount) AS `max #pages in a cat`
 ----	   
 
-
-== Exploring the dataset
-
-Orphan nodes? 
+Also, the full export contains some orphan nodes. Probably unmaintained/migrated categories? Here is how to get the number of orphan nodes:
 
 [source,cypher]
 ----
@@ -256,91 +306,3 @@ RETURN COUNT(c)
 ----
 
 
-== Exploring the dataset
-
-Same analysis we did before...
-
-[source,cypher]
-----
-MATCH (c:Category)
-RETURN c.catName AS category, 
-	   size((c)<-[:SUBCAT_OF]-()) AS subcatCount, 
-       size((c)-[:SUBCAT_OF]->()) AS superCatCount, 
-       size((c)-[:SUBCAT_OF]-()) AS total
-ORDER BY total DESC 
-LIMIT 500
-----
-
-== Exploring the dataset
-
-Adding a 'balance index' ...and skipping the top ones
-
-[source,cypher]
-----
-MATCH (c:Category)
-WITH c.catName AS category,        
-	 size((c)<-[:SUBCAT_OF]-()) AS subCatCount, 
-     size((c)-[:SUBCAT_OF]->()) AS superCatCount
-WHERE  subCatCount > 0 AND superCatCount > 0
-RETURN category, 
-	   ABS(toFloat(superCatCount - subCatCount)/(superCatCount + subCatCount)) as balanceIndex, 
-	   subCatCount, 
-       superCatCount
-ORDER BY balanceIndex DESC 
-SKIP 20000 LIMIT 500
-----
-
-== Exploring the dataset
-
-Global aggregates
-
-[source,cypher]
-----
-MATCH (c:Category)
-WITH c.catName AS category,        
-	 size((c)<-[:SUBCAT_OF]-()) AS subCatCount, 
-     size((c)-[:SUBCAT_OF]->()) AS superCatCount, 
-     size((c)-[:SUBCAT_OF]-()) AS total
-//WHERE  subCatCount > 0 AND superCatCount > 0
-RETURN AVG(subCatCount) AS `AVG #subcats`,
-	   MIN(subCatCount) AS `MIN #subcats`,
-       MAX(subCatCount)  AS `MAX #subcats`, 
-       percentileCont(subCatCount,0.9)  AS `.9p #subcats`,
-       AVG(superCatCount) AS `AVG #supercats`,
-       MIN(superCatCount) AS `MIN #supercats`,
-       MAX(superCatCount) AS `MAX #supercats`, 
-       percentileCont(superCatCount,0.95) AS `.9p #supercats`
-----
-
-== Loading the data from an sql dump via APOC + JDBC
-
-[source,cypher]
-----
-WITH "jdbc:mysql://localhost:3306/northwind?user=root&password=root" AS url,
-     "select c.cat_id as CAT_ID, cast(c.cat_title as CHAR) as CAT_TITLE , c.cat_pages as CAT_PAGES_COUNT, c.cat_subcats as CAT_SUBCAT_COUNT
-	  from test.category c, test.page p
-	  where c.cat_title = p.page_title
- 	  and p.page_namespace = 14 limit 300" AS sql
-CALL apoc.load.jdbc(url,sql) YIELD row
-CREATE (c:Category { catId: row.cat_id}) 
-SET c.catName = row.CAT_TITLE, c.pageCount = toInt(row.cat_pages), c.subcatCount = toInt(row.cat_subcats)
-----
-
-[source,cypher]
-----
-WITH "jdbc:mysql://localhost:3306/northwind?user=root&password=root" AS url,
-     "select p.page_id + 0 as FROM_PAGE_ID, p2.page_id + 0 as TO_PAGE_ID
-from test.category c, test.page p , test.categorylinks l, test.category c2, test.page p2
-where l.cl_type = 'subcat'
-	  and c.cat_title = p.page_title
-      and p.page_namespace = 14
-	  and l.cl_from = p.page_id
-      and l.cl_to = c2.cat_title
-      and c2.cat_title = p2.page_title
-      and p2.page_namespace = 14 
-      limit 100 " AS sql
-CALL apoc.load.jdbc(url,sql) YIELD row
-MATCH (from:Category { catId: row.FROM_PAGE_ID}) 
-MATCH (to:Category { catId: row.TO_PAGE_ID})
-CREATE (from)-[:SUBCAT_OF]->(to)
-----
