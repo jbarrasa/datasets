@@ -1,0 +1,203 @@
+== GC 2018 - Ontologies in Neo4j
+
+== Data Load
+
+Before starting the data load you've downloaded the sqlite version of the dataset from [Kaggle](https://www.kaggle.com/wendykan/lending-club-loan-data)
+
+Also make sure you've downloaded the [Sqlite JDBC driver](https://bitbucket.org/xerial/sqlite-jdbc/downloads/), copied it to the plugins directory and restarted the server.
+
+The [neosemantics extension](https://github.com/jbarrasa/neosemantics) is also required.
+
+=== Index creation
+
+[source,cypher]
+----
+CREATE INDEX ON :State(stateId)
+----
+
+[source,cypher]
+----
+CREATE INDEX ON :ZipCode(zip)
+----
+
+=== JDBC Driver
+
+[source,cypher]
+----
+CALL apoc.load.driver("org.sqlite.JDBC");
+----
+
+=== Relational to Graph
+Notice the limit and offset in the sql query. I use this mechanism to load the data in batches. You can decide how many of them you want by 
+[source,cypher]
+----
+call apoc.load.jdbc("jdbc:sqlite:/path_to_your_db/database.sqlite", " select  * from loan where addr_state is not null and zip_code is not null limit 25000 offset 25000;") yield row
+with row 
+merge (st:State { stateId: row.addr_state })
+merge (zc:ZipCode { zip : row.zip_code })-[:IN_STATE]->(st)
+create (bo:Borrower { borrowerId: row.member_id })
+create (lo:Loan { loanId: row.id, intRate : row.int_rate, borrowerAnualInc: row.annual_inc, borrowerEmpLength: row.emp_length, borrowerHomeOwn: row.home_ownership, revolUtil : row.revol_util, grade: row.grade, subGrade: row.sub_grade, term: row.term, desc: row.desc, loanStatus: row.loan_status, revolvingBal: row.revol_bal, installment: row.installment, loanAmnt: row.loan_amnt, purpose: row.purpose })
+merge (zc)<-[:IN_ZIP]-(lo)<-[:BORROWS]-(bo)
+----
+
+== Querying the graph
+
+Loan aggregates by state
+
+[source,cypher]
+----
+MATCH (n:State)<-[:IN_STATE]-()<-[:IN_ZIP]-(loan:Loan) 
+RETURN n.stateId as state, count(loan) as count, sum(loan.loanAmnt) as totalBorrowed, avg(toFloat(substring(loan.intRate,1,length(loan.intRate)-2))) as avgIR
+ORDER BY totalBorrowed DESC
+----
+
+== Exposing the data as RDF
+
+Direct
+
+[source,cypher]
+----
+:GET /semantic/describe/id?nodeid=1664
+----
+
+== Mapping definition
+
+[source,cypher]
+----
+with [{ neoSchemaElem : "Loan", publicSchemaElem: "LoanOrCredit" },
+{ neoSchemaElem : "loanAmnt", publicSchemaElem: "amount" },
+{ neoSchemaElem : "term", publicSchemaElem: "loanTerm" },
+{ neoSchemaElem : "Borrower", publicSchemaElem: "Person" },
+{ neoSchemaElem : "BORROWS", publicSchemaElem: "borrower" },
+{ neoSchemaElem : "IN_ZIP", publicSchemaElem: "location" },
+{ neoSchemaElem : "IN_STATE", publicSchemaElem: "location" }] as mappings
+call semantics.mapping.addSchema("http://schema.org/","sch") yield node as sch
+unwind mappings as m
+call semantics.mapping.addMappingToSchema(sch,m.neoSchemaElem,m.publicSchemaElem) yield node 
+return count(node) as mappingsDefined
+----
+
+Now let's call the api again... and (optionally) restrict the returned elements to those for which mappings have been defined by using the `showOnlyMappedInfo` additional parameter.
+
+[source,cypher]
+----
+:GET /semantic/describe/id?nodeid=1664&showOnlyMappedInfo
+----
+
+== Batch export/publishing via cypher
+
+[source,cypher]
+----
+MATCH (:State { stateId : 'NY'})<-[:IN_STATE]-(z)<-[:IN_ZIP]-(loan:Loan) 
+RETURN z.zip as zipCode, count(loan) as count
+ORDER BY count DESC
+----
+
+[source,cypher]
+----
+MATCH (:ZipCode { zip: '120xx' })<-[:IN_ZIP]-(loan:Loan) RETURN properties(loan) as loan
+----
+
+
+[source,cypher]
+See that the mapping is applied to the results of cypher queries too.
+----
+:POST /semantic/cypher 
+{ "cypher": "MATCH (:ZipCode { zip: '120xx' })<-[:IN_ZIP]-(loan:Loan) RETURN loan", "showOnlyMapped" : "true"}
+----
+
+== Mappings are dynamic
+
+We can delete the existing ones
+[source,cypher]
+----
+call semantics.mapping.dropSchema("http://schema.org/")
+----
+And create a new set with some elements mapping to a vocabulary and some others to a second one. Note that the two vocabularies used in the example are fictitious.
+[source,cypher]
+----
+with [{ neoSchemaElem : "Loan", publicSchemaElem: "LoanOrCredit" },
+{ neoSchemaElem : "loanAmnt", publicSchemaElem: "amount" },
+{ neoSchemaElem : "term", publicSchemaElem: "loanTerm" }] as mappings
+call semantics.mapping.addSchema("http://neo4j.org/finance#","neo4f") yield node as sch
+unwind mappings as m
+call semantics.mapping.addMappingToSchema(sch,m.neoSchemaElem,m.publicSchemaElem) yield node 
+return count(node) as mappingsDefined
+----
+
+[source,cypher]
+----
+with [{ neoSchemaElem : "Borrower", publicSchemaElem: "Person" },
+{ neoSchemaElem : "BORROWS", publicSchemaElem: "borrower" },
+{ neoSchemaElem : "IN_ZIP", publicSchemaElem: "location" },
+{ neoSchemaElem : "IN_STATE", publicSchemaElem: "location" }] as mappings
+call semantics.mapping.addSchema("http://neo4j.org/core#","neo4c") yield node as sch
+unwind mappings as m
+call semantics.mapping.addMappingToSchema(sch,m.neoSchemaElem,m.publicSchemaElem) yield node 
+return count(node) as mappingsDefined
+----
+
+Let's re-run the same request and see the difference in the RDF generated:
+
+[source,cypher]
+----
+:POST /semantic/cypher
+{ "cypher": "MATCH (:ZipCode { zip: '120xx' })<-[:IN_ZIP]-(loan:Loan) RETURN loan", "showOnlyMapped" : "true"}
+----
+
+== A Class hiearchy in Neo4j 
+
+Import a light version of an ontology in three steps
+
+Classes (categories)
+[source,cypher]
+----
+call semantics.streamRDF("https://schema.org/version/3.4/schema.nt","N-Triples",{}) yield subject as s, predicate as p, object as o 
+with s, p, o where p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" and o = "http://www.w3.org/2000/01/rdf-schema#Class"
+MERGE (:Label { uri: s })
+----
+
+names for classes (rdf:labels)
+[source,cypher]
+----
+call semantics.streamRDF("https://schema.org/version/3.4/schema.nt","N-Triples",{}) yield subject as s, predicate as p, object as o 
+with s, p, o where p = "http://www.w3.org/2000/01/rdf-schema#label" 
+MATCH (l:Label { uri: s }) SET l.name = o
+----
+
+class hierarchy
+[source,cypher]
+----
+call semantics.streamRDF("https://schema.org/version/3.4/schema.nt","N-Triples",{}) yield subject as s, predicate as p, object as o 
+with s, p, o where p = "http://www.w3.org/2000/01/rdf-schema#subClassOf" 
+MATCH (child:Label { uri: s }), (parent:Label { uri: o })
+MERGE (child)-[:SLO]->(parent)
+----
+
+=== Explore and use the class hierarchy for inferencing
+
+Find the relevant category by name
+
+[source,cypher]
+----
+MATCH p = (l:Label { name : "LoanOrCredit"})-[:SLO]-() RETURN p
+----
+
+Link my model to the ontology
+
+[source,cypher]
+----
+MATCH (ontoLoan:Label { name : "LoanOrCredit"})
+MERGE (myLoan:Label { name : "Loan" })
+MERGE (myLoan)-[:SLO]->(ontoLoan)
+----
+
+Infer Label based on sublabel of (SLO) statements
+
+[source,cypher]
+----
+call semantics.inference.getNodesWithLabel("FinancialProduct") yield node 
+RETURN node limit 10
+----
+
+

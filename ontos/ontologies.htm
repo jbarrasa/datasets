@@ -1,0 +1,354 @@
+<style type="text/css" media="screen">
+/*
+.nodes-image {
+	margin:-100;
+}
+*/	
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
+
+.imageblock .content img, .image img {max-width: 900px;max-height: 300px;}
+.deck h3, .deck h4 {display: block !important;margin-bottom:8px;margin-top:5px;}
+.listingblock {margin:8px;}
+.pull-bottom {position:relative;bottom:1em;}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.admonitionblock.note.speaker { display:none; }
+</style>
+<style type="text/css" media="screen">
+/* #editor.maximize-editor .CodeMirror-code { font-size:24px; line-height:26px; } */
+</style>
+<article class="guide" ng-controller="AdLibDataController">
+  <carousel class="deck container-fluid">
+    <!--slide class="row-fluid">
+      <div class="col-sm-3">
+        <h3>GC 2018 - Ontologies in Neo4j</h3>
+        <p class="lead">Information</p>
+			<!dl>
+				
+				
+				
+				
+				
+			</dl>
+		</div>
+      <div class="col-sm-9">
+        <figure>
+          <img style="width:300px" src=""/>
+        </figure>
+      </div>
+    </slide-->
+    
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>GC 2018 - Ontologies in Neo4j</h3>
+    <br/>
+    <div>
+      
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Data Load</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Before starting the data load you&#8217;ve downloaded the sqlite version of the dataset from [Kaggle](<a href="https://www.kaggle.com/wendykan/lending-club-loan-data" class="bare">https://www.kaggle.com/wendykan/lending-club-loan-data</a>)</p>
+</div>
+<div class="paragraph">
+<p>Also make sure you&#8217;ve downloaded the [Sqlite JDBC driver](<a href="https://bitbucket.org/xerial/sqlite-jdbc/downloads/" class="bare">https://bitbucket.org/xerial/sqlite-jdbc/downloads/</a>), copied it to the plugins directory and restarted the server.</p>
+</div>
+<div class="paragraph">
+<p>The [neosemantics extension](<a href="https://github.com/jbarrasa/neosemantics" class="bare">https://github.com/jbarrasa/neosemantics</a>) is also required.</p>
+</div>
+
+
+
+   <h4>Index creation</h4>
+   <div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE INDEX ON :State(stateId)<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE INDEX ON :ZipCode(zip)<!--/code--></pre>
+</div>
+</div>
+
+
+
+   <h4>JDBC Driver</h4>
+   <div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CALL apoc.load.driver("org.sqlite.JDBC");<!--/code--></pre>
+</div>
+</div>
+
+
+
+   <h4>Relational to Graph</h4>
+   <div class="paragraph">
+<p>Notice the limit and offset in the sql query. I use this mechanism to load the data in batches. You can decide how many of them you want by</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->call apoc.load.jdbc("jdbc:sqlite:/path_to_your_db/database.sqlite", " select  * from loan where addr_state is not null and zip_code is not null limit 25000 offset 25000;") yield row
+with row
+merge (st:State { stateId: row.addr_state })
+merge (zc:ZipCode { zip : row.zip_code })-[:IN_STATE]-&gt;(st)
+create (bo:Borrower { borrowerId: row.member_id })
+create (lo:Loan { loanId: row.id, intRate : row.int_rate, borrowerAnualInc: row.annual_inc, borrowerEmpLength: row.emp_length, borrowerHomeOwn: row.home_ownership, revolUtil : row.revol_util, grade: row.grade, subGrade: row.sub_grade, term: row.term, desc: row.desc, loanStatus: row.loan_status, revolvingBal: row.revol_bal, installment: row.installment, loanAmnt: row.loan_amnt, purpose: row.purpose })
+merge (zc)&lt;-[:IN_ZIP]-(lo)&lt;-[:BORROWS]-(bo)<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Querying the graph</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Loan aggregates by state</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (n:State)&lt;-[:IN_STATE]-()&lt;-[:IN_ZIP]-(loan:Loan)
+RETURN n.stateId as state, count(loan) as count, sum(loan.loanAmnt) as totalBorrowed, avg(toFloat(substring(loan.intRate,1,length(loan.intRate)-2))) as avgIR
+ORDER BY totalBorrowed DESC<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Exposing the data as RDF</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Direct</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->:GET /semantic/describe/id?nodeid=1664<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Mapping definition</h3>
+    <br/>
+    <div>
+      <div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->with [{ neoSchemaElem : "Loan", publicSchemaElem: "LoanOrCredit" },
+{ neoSchemaElem : "loanAmnt", publicSchemaElem: "amount" },
+{ neoSchemaElem : "term", publicSchemaElem: "loanTerm" },
+{ neoSchemaElem : "Borrower", publicSchemaElem: "Person" },
+{ neoSchemaElem : "BORROWS", publicSchemaElem: "borrower" },
+{ neoSchemaElem : "IN_ZIP", publicSchemaElem: "location" },
+{ neoSchemaElem : "IN_STATE", publicSchemaElem: "location" }] as mappings
+call semantics.mapping.addSchema("http://schema.org/","sch") yield node as sch
+unwind mappings as m
+call semantics.mapping.addMappingToSchema(sch,m.neoSchemaElem,m.publicSchemaElem) yield node
+return count(node) as mappingsDefined<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now let&#8217;s call the api again&#8230;&#8203; and (optionally) restrict the returned elements to those for which mappings have been defined by using the <code>showOnlyMappedInfo</code> additional parameter.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->:GET /semantic/describe/id?nodeid=1664&amp;showOnlyMappedInfo<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Batch export/publishing via cypher</h3>
+    <br/>
+    <div>
+      <div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (:State { stateId : 'NY'})&lt;-[:IN_STATE]-(z)&lt;-[:IN_ZIP]-(loan:Loan)
+RETURN z.zip as zipCode, count(loan) as count
+ORDER BY count DESC<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (:ZipCode { zip: '120xx' })&lt;-[:IN_ZIP]-(loan:Loan) RETURN properties(loan) as loan<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->See that the mapping is applied to the results of cypher queries too.
+----
+:POST /semantic/cypher
+{ "cypher": "MATCH (:ZipCode { zip: '120xx' })&lt;-[:IN_ZIP]-(loan:Loan) RETURN loan", "showOnlyMapped" : "true"}
+----<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Mappings are dynamic</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>We can delete the existing ones</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->call semantics.mapping.dropSchema("http://schema.org/")<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And create a new set with some elements mapping to a vocabulary and some others to a second one. Note that the two vocabularies used in the example are fictitious.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->with [{ neoSchemaElem : "Loan", publicSchemaElem: "LoanOrCredit" },
+{ neoSchemaElem : "loanAmnt", publicSchemaElem: "amount" },
+{ neoSchemaElem : "term", publicSchemaElem: "loanTerm" }] as mappings
+call semantics.mapping.addSchema("http://neo4j.org/finance#","neo4f") yield node as sch
+unwind mappings as m
+call semantics.mapping.addMappingToSchema(sch,m.neoSchemaElem,m.publicSchemaElem) yield node
+return count(node) as mappingsDefined<!--/code--></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->with [{ neoSchemaElem : "Borrower", publicSchemaElem: "Person" },
+{ neoSchemaElem : "BORROWS", publicSchemaElem: "borrower" },
+{ neoSchemaElem : "IN_ZIP", publicSchemaElem: "location" },
+{ neoSchemaElem : "IN_STATE", publicSchemaElem: "location" }] as mappings
+call semantics.mapping.addSchema("http://neo4j.org/core#","neo4c") yield node as sch
+unwind mappings as m
+call semantics.mapping.addMappingToSchema(sch,m.neoSchemaElem,m.publicSchemaElem) yield node
+return count(node) as mappingsDefined<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s re-run the same request and see the difference in the RDF generated:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->:POST /semantic/cypher
+{ "cypher": "MATCH (:ZipCode { zip: '120xx' })&lt;-[:IN_ZIP]-(loan:Loan) RETURN loan", "showOnlyMapped" : "true"}<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>A Class hiearchy in Neo4j</h3>
+    <br/>
+    <div>
+      <div class="paragraph">
+<p>Import a light version of an ontology in three steps</p>
+</div>
+<div class="paragraph">
+<p>Classes (categories)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->call semantics.streamRDF("https://schema.org/version/3.4/schema.nt","N-Triples",{}) yield subject as s, predicate as p, object as o
+with s, p, o where p = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" and o = "http://www.w3.org/2000/01/rdf-schema#Class"
+MERGE (:Label { uri: s })<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>names for classes (rdf:labels)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->call semantics.streamRDF("https://schema.org/version/3.4/schema.nt","N-Triples",{}) yield subject as s, predicate as p, object as o
+with s, p, o where p = "http://www.w3.org/2000/01/rdf-schema#label"
+MATCH (l:Label { uri: s }) SET l.name = o<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>class hierarchy</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->call semantics.streamRDF("https://schema.org/version/3.4/schema.nt","N-Triples",{}) yield subject as s, predicate as p, object as o
+with s, p, o where p = "http://www.w3.org/2000/01/rdf-schema#subClassOf"
+MATCH (child:Label { uri: s }), (parent:Label { uri: o })
+MERGE (child)-[:SLO]-&gt;(parent)<!--/code--></pre>
+</div>
+</div>
+
+
+
+   <h4>Explore and use the class hierarchy for inferencing</h4>
+   <div class="paragraph">
+<p>Find the relevant category by name</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH p = (l:Label { name : "LoanOrCredit"})-[:SLO]-() RETURN p<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Link my model to the ontology</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (ontoLoan:Label { name : "LoanOrCredit"})
+MERGE (myLoan:Label { name : "Loan" })
+MERGE (myLoan)-[:SLO]-&gt;(ontoLoan)<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Infer Label based on sublabel of (SLO) statements</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->call semantics.inference.getNodesWithLabel("FinancialProduct") yield node
+RETURN node limit 10<!--/code--></pre>
+</div>
+</div>
+	</div>
+  </div>
+</slide>
+  </carousel>
+</article>
