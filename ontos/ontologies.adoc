@@ -98,9 +98,8 @@ ORDER BY count DESC
 MATCH (:ZipCode { zip: '120xx' })<-[:IN_ZIP]-(loan:Loan) RETURN properties(loan) as loan
 ----
 
-
-[source,cypher]
 See that the mapping is applied to the results of cypher queries too.
+[source,cypher]
 ----
 :POST /semantic/cypher 
 { "cypher": "MATCH (:ZipCode { zip: '120xx' })<-[:IN_ZIP]-(loan:Loan) RETURN loan", "showOnlyMapped" : "true"}
