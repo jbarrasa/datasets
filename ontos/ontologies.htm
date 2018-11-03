@@ -62,13 +62,13 @@
     <br/>
     <div>
       <div class="paragraph">
-<p>Before starting the data load you&#8217;ve downloaded the sqlite version of the dataset from [Kaggle](<a href="https://www.kaggle.com/wendykan/lending-club-loan-data" class="bare">https://www.kaggle.com/wendykan/lending-club-loan-data</a>)</p>
+<p>Before starting the data load you&#8217;ve downloaded the sqlite version of the dataset from <a href="https://www.kaggle.com/wendykan/lending-club-loan-data">Kaggle</a></p>
 </div>
 <div class="paragraph">
-<p>Also make sure you&#8217;ve downloaded the [Sqlite JDBC driver](<a href="https://bitbucket.org/xerial/sqlite-jdbc/downloads/" class="bare">https://bitbucket.org/xerial/sqlite-jdbc/downloads/</a>), copied it to the plugins directory and restarted the server.</p>
+<p>Also make sure you&#8217;ve downloaded the <a href="https://bitbucket.org/xerial/sqlite-jdbc/downloads/">Sqlite JDBC driver</a>, copied it to the plugins directory and restarted the server.</p>
 </div>
 <div class="paragraph">
-<p>The [neosemantics extension](<a href="https://github.com/jbarrasa/neosemantics" class="bare">https://github.com/jbarrasa/neosemantics</a>) is also required.</p>
+<p>The <a href="https://github.com/jbarrasa/neosemantics">neosemantics extension</a> is also required.</p>
 </div>
 
 
@@ -267,8 +267,7 @@ return count(node) as mappingsDefined<!--/code--></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->:POST /semantic/cypher
-{ "cypher": "MATCH (:ZipCode { zip: '120xx' })&lt;-[:IN_ZIP]-(loan:Loan) RETURN loan", "showOnlyMapped" : "true"}<!--/code--></pre>
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->:GET /semantic/describe/id?nodeid=1664&amp;showOnlyMappedInfo<!--/code--></pre>
 </div>
 </div>
 	</div>

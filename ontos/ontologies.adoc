@@ -2,11 +2,11 @@
 
 == Data Load
 
-Before starting the data load you've downloaded the sqlite version of the dataset from [Kaggle](https://www.kaggle.com/wendykan/lending-club-loan-data)
+Before starting the data load you've downloaded the sqlite version of the dataset from https://www.kaggle.com/wendykan/lending-club-loan-data[Kaggle]
 
-Also make sure you've downloaded the [Sqlite JDBC driver](https://bitbucket.org/xerial/sqlite-jdbc/downloads/), copied it to the plugins directory and restarted the server.
+Also make sure you've downloaded the https://bitbucket.org/xerial/sqlite-jdbc/downloads/[Sqlite JDBC driver], copied it to the plugins directory and restarted the server.
 
-The [neosemantics extension](https://github.com/jbarrasa/neosemantics) is also required.
+The https://github.com/jbarrasa/neosemantics[neosemantics extension] is also required.
 
 === Index creation
 
@@ -141,8 +141,7 @@ Let's re-run the same request and see the difference in the RDF generated:
 
 [source,cypher]
 ----
-:POST /semantic/cypher
-{ "cypher": "MATCH (:ZipCode { zip: '120xx' })<-[:IN_ZIP]-(loan:Loan) RETURN loan", "showOnlyMapped" : "true"}
+:GET /semantic/describe/id?nodeid=1664&showOnlyMappedInfo
 ----
 
 == A Class hiearchy in Neo4j 
