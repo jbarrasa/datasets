@@ -64,7 +64,7 @@ image:https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/category-gra
 [source,cypher]
 ----
 UNWIND range(0,3) as level 
-CALL apoc.cypher.doit("
+CALL apoc.cypher.doIt("
 MATCH (c:Category { subcatsFetched: false, level: $level})
 CALL apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&cmprop=ids%7Ctitle&cmlimit=500')
 YIELD value as results
@@ -93,7 +93,7 @@ image:https://github.com/jbarrasa/datasets/raw/master/wikipedia/img/page-graph.p
 [source,cypher]
 ----
 UNWIND range(0,4) as level 
-CALL apoc.cypher.doit("
+CALL apoc.cypher.doIt("
 MATCH (c:Category { pagesFetched: false, level: $level })
 CALL apoc.load.json('https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=page&cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&cmprop=ids%7Ctitle&cmlimit=500')
 YIELD value as results
@@ -138,7 +138,7 @@ WITH "SELECT ?label
          FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en')) } LIMIT 1
          " AS sparqlPattern
 UNWIND range(0,3) as level
-CALL apoc.cypher.doit("
+CALL apoc.cypher.doIt("
 MATCH (c:Category { level: $level })<-[:IN_CATEGORY]-(p:Page)
 WHERE NOT exists(p.abstract) 
 WITH DISTINCT p, apoc.text.replace(sparqlPattern,'@wikiurl@',p.pageUrl) as runnableSparql LIMIT 100
