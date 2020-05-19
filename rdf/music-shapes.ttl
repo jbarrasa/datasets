@@ -16,3 +16,22 @@ PREFIX : <http://testshapes#>
      sh:maxCount 4 ;
      sh:class music:Artist
    ] .
+
+:AlbumShape a sh:NodeShape ;
+   sh:targetClass music:Album;
+   sh:property [
+      sh:path music:date ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+      sh:datatype xsd:date 
+   ] ;
+   sh:property [
+     sh:path music:track ;
+     sh:minCount 1 ;
+     sh:class music:Song
+   ] ;
+   sh:property [
+     sh:path music:artist ;
+     sh:minCount 1 ;
+     sh:class music:Artist
+   ] . 
