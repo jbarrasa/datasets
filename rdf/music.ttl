@@ -20,7 +20,7 @@ PREFIX : <http://neo4j.com/indiv#>
 :White_Album a music:Album ;
     music:name "The Beatles (White Album)" ;
     music:date "1968-11-22"^^xsd:date ;
-    music:Artist :The_Beatles ;
+    music:artist :The_Beatles ;
     music:track :Helter_Skelter .
 
 :Helter_Skelter a music:Song ;
@@ -50,7 +50,7 @@ PREFIX : <http://neo4j.com/indiv#>
 :Out_of_Our_Heads a music:Album ;
     music:name "Out of Our Heads" ;
     music:date "1965-07-30"^^xsd:date ;
-    music:Artist :The_Stones ;
+    music:artist :The_Stones ;
     music:track :Satisfaction .
 
 :Satisfaction a music:Song ;
