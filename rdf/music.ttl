@@ -1,7 +1,7 @@
 PREFIX music: <http://neo4j.com/voc/music#>
 PREFIX ind: <http://neo4j.com/indiv#>
 
-ind:The_Beatles a music:Band ;
+ind:The_Beatles a music:Band, music:Artist ;
     music:name "The Beatles" ;
     music:member ind:John_Lennon , ind:Paul_McCartney , ind:George_Harrison , ind:Ringo_Starr .
 
@@ -28,7 +28,7 @@ ind:Helter_Skelter a music:Song ;
     music:length 269 ;
     music:writer ind:John_Lennon , ind:Paul_McCartney .
 
-ind:The_Stones a music:Band ;
+ind:The_Stones a music:Band, music:Artist ;
     music:name "The Rolling Stones" ;
     music:member ind:Mick_Jagger, ind:Keith_Richards, ind:Charlie_Watts, ind:Ronnie_Wood, ind:Bill_Wyman .
 
