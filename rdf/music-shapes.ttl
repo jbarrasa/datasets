@@ -12,7 +12,7 @@ PREFIX : <http://testshapes#>
    ] ;
    sh:property [
      sh:path music:member ;
-     sh:minCount 1 ;
+     sh:minCount 2 ;
      sh:maxCount 4 ;
      sh:class music:Artist
    ] .
