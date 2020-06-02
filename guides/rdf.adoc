@@ -338,7 +338,7 @@ RETURN m, db, d
 
 == Integration #2 : Loading RDF data into Neo4j 
 
-=== Querying a SPARQL endpoint and importing via neosemantics (n10s)
+=== Importing RDF via neosemantics (n10s)
 
 DESCRIBE queries in RDF return triples
 
@@ -370,4 +370,4 @@ And we can now load the triples related to Caribbean Airlines in a similar way.
 [source,cypher]
 ----
 call n10s.rdf.import.fetch("http://dbpedia.org/data/Caribbean_Airlines.ttl","Turtle")
----
+----
