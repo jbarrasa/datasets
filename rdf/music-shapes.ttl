@@ -1,0 +1,37 @@
+PREFIX music: <http://neo4j.com/voc/music#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX : <http://testshapes#>
+
+:BandShape a sh:NodeShape ;
+   sh:targetClass music:Band;
+   sh:property [
+     sh:path music:name ;
+     sh:minCount 1 ;
+     sh:maxCount 1 ;
+     sh:datatype xsd:string
+   ] ;
+   sh:property [
+     sh:path music:member ;
+     sh:minCount 2 ;
+     sh:maxCount 4 ;
+     sh:class music:Artist
+   ] .
+
+:AlbumShape a sh:NodeShape ;
+   sh:targetClass music:Album;
+   sh:property [
+      sh:path music:date ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+      sh:datatype xsd:date 
+   ] ;
+   sh:property [
+     sh:path music:track ;
+     sh:minCount 1 ;
+     sh:class music:Song
+   ] ;
+   sh:property [
+     sh:path music:artist ;
+     sh:minCount 1 ;
+     sh:class music:Artist
+   ] . 
