@@ -68,6 +68,13 @@ MATCH (:ontolex__LexicalEntry)-[rel:ontolex__canonicalForm]-(cf)
 DELETE rel, cf ;
 
 
+// and finally let's recreate the canonical forms but with no duplicates
+MATCH (le:ontolex__LexicalEntry)
+MERGE (f:Resource { uri: apoc.text.replace(le.uri,"^(.*)#.*$","$1")}) 
+    ON CREATE SET f.ontolex__writtenRep = le.ontolex__canonicalForm, f:ontolex__Form 
+MERGE (le)-[:ontolex__canonicalForm]->(f) ;
+
+
 //this proves that the definition is unique to concepts so no reason not to have it as a property of the concept 
 MATCH (n:ontolex__LexicalConcept)-[:wn__definition]-(cf)
 with n, count(distinct cf.rdf__value) as can
