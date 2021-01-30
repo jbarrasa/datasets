@@ -33,20 +33,19 @@ call n10s.nsprefixes.add("li","http://www.lexinfo.net/ontology/2.0/lexinfo#") ;
 
 //convert POS into labels for lexical entries
 match (le:ontolex__LexicalEntry)-[:wn__partOfSpeech]->(pos)
-with le, apoc.text.join([x in split(apoc.text.replace(pos.uri,".*#(.*)$","$1"),"_") | apoc.text.capitalize(x)],"")) as posAsString
+with le, apoc.text.join([x in split(apoc.text.replace(pos.uri,".*#(.*)$","$1"),"_") | apoc.text.capitalize(x)],"") as posAsString
 set le.wn__partOfSpeech = posAsString
 with le, posAsString
-call apoc.create.addLabels(le, [n10s.rdf.shortFormFromFullUri("http://www.lexinfo.net/ontology/2.0/lexinfo#" + posAsString]) yield node
-return count(node) ;
+call apoc.create.addLabels(le, [n10s.rdf.shortFormFromFullUri("http://www.lexinfo.net/ontology/2.0/lexinfo#" + posAsString)]) yield node
+return count(node);
 
 //convert POS into labels for lexical concepts 
 match (le:ontolex__LexicalConcept)-[:wn__partOfSpeech]->(pos)
-with le, apoc.text.join([x in split(apoc.text.replace(pos.uri,".*#(.*)$","$1"),"_") | apoc.text.capitalize(x)],"")) as posAsString
+with le, apoc.text.join([x in split(apoc.text.replace(pos.uri,".*#(.*)$","$1"),"_") | apoc.text.capitalize(x)],"") as posAsString
 set le.wn__partOfSpeech = posAsString
 with le, posAsString
-call apoc.create.addLabels(le, [n10s.rdf.shortFormFromFullUri("http://www.lexinfo.net/ontology/2.0/lexinfo#" + posAsString]) yield node
-return count(node) ;
-
+call apoc.create.addLabels(le, [n10s.rdf.shortFormFromFullUri("http://www.lexinfo.net/ontology/2.0/lexinfo#" + posAsString)]) yield node
+return count(node);
 
 //now we can clean old POS
 match ()-[r:wn__partOfSpeech]->(pos)
