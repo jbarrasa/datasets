@@ -33,7 +33,7 @@ ind:The_Stones a music:Band ;
     music:member ind:Mick_Jagger, ind:Keith_Richards, ind:Charlie_Watts, ind:Ronnie_Wood, ind:Bill_Wyman .
 
 ind:Mick_Jagger a music:Artist ;
-    music:name ":Mick Jagger" .
+    music:name "Mick Jagger" .
 
 ind:Keith_Richards a music:Artist ;
     music:name "Keith Richards" .
