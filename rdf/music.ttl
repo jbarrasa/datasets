@@ -20,7 +20,7 @@ ind:George_Harrison a music:Artist ;
 ind:White_Album a music:Album ;
     music:name "The Beatles (White Album)" ;
     music:date "1968-11-22"^^xsd:date ;
-    music:artist ind:The_Beatles ;
+    music:author ind:The_Beatles ;
     music:track ind:Helter_Skelter .
 
 ind:Helter_Skelter a music:Song ;
@@ -50,7 +50,7 @@ ind:Bill_Wyman a music:Artist ;
 ind:Out_of_Our_Heads a music:Album ;
     music:name "Out of Our Heads" ;
     music:date "1965-07-30"^^xsd:date ;
-    music:artist ind:The_Stones ;
+    music:author ind:The_Stones ;
     music:track ind:Satisfaction .
 
 ind:Satisfaction a music:Song ;
