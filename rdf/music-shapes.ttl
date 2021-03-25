@@ -31,7 +31,7 @@ PREFIX : <http://testshapes#>
      sh:class music:Song
    ] ;
    sh:property [
-     sh:path music:artist ;
+     sh:path music:author ;
      sh:minCount 1 ;
-     sh:class music:Artist
+     sh:class music:Band
    ] . 
