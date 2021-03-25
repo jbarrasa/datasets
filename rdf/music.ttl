@@ -28,7 +28,7 @@ ind:Helter_Skelter a music:Song ;
     music:length 269 ;
     music:writer ind:John_Lennon , ind:Paul_McCartney .
 
-ind:The_Stones a music:Band, music:Artist ;
+ind:The_Stones a music:Band ;
     music:name "The Rolling Stones" ;
     music:member ind:Mick_Jagger, ind:Keith_Richards, ind:Charlie_Watts, ind:Ronnie_Wood, ind:Bill_Wyman .
 
