@@ -1,0 +1,10 @@
+SELECT  (GROUP_CONCAT(DISTINCT concat("wd:",strafter(str(?item), "entity/")); SEPARATOR=" ") AS ?result) 
+WHERE {
+    ?item wdt:P31 wd:Q11424 ; wdt:P495  wd:Q30 ;
+        wdt:P136 wd:Q1054574 .       
+} 
+
+#romance wd:Q1054574
+#musical wd:Q842256
+#horror film wd:Q200092
+#action film wd:Q188473
