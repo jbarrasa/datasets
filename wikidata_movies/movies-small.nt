@@ -1,0 +1,582 @@
+<http://www.wikidata.org/entity/Q504697> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Film> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#name> "WarGames"@en .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#pubDate> "1983-06-03T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#pubDate> "1983-12-09T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#pubDate> "1983-10-07T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q130232> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q2484376> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#countryOfOrigin> <http://www.wikidata.org/entity/Q30> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q547485> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q253513> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q446717> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q28755> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q599439> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q21767547> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q1223> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q824> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q1261> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q5083> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q363> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q2539> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q8683> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q11660> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q201424> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q550452> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q6987386> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q6852262> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q2930613> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q785290> .
+<http://www.wikidata.org/entity/Q504697> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q3510521> .
+<http://www.wikidata.org/entity/Q130232> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q130232> <neo4j://graph.schema#name> "drama"@en .
+<http://www.wikidata.org/entity/Q30> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Country> .
+<http://www.wikidata.org/entity/Q30> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q30> <neo4j://graph.schema#name> "United States of America"@en .
+<http://www.wikidata.org/entity/Q547485> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q547485> <neo4j://graph.schema#name> "John Badham"@en .
+<http://www.wikidata.org/entity/Q253513> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q253513> <neo4j://graph.schema#name> "Ally Sheedy"@en .
+<http://www.wikidata.org/entity/Q21767547> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q21767547> <neo4j://graph.schema#name> "Cheyenne Mountain Complex"@en .
+<http://www.wikidata.org/entity/Q363> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q363> <neo4j://graph.schema#name> "World War III"@en .
+<http://www.wikidata.org/entity/Q446717> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q446717> <neo4j://graph.schema#name> "Dabney Coleman"@en .
+<http://www.wikidata.org/entity/Q2484376> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q2484376> <neo4j://graph.schema#name> "thriller film"@en .
+<http://www.wikidata.org/entity/Q1223> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q1223> <neo4j://graph.schema#name> "Washington"@en .
+<http://www.wikidata.org/entity/Q28755> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q28755> <neo4j://graph.schema#name> "Matthew Broderick"@en .
+<http://www.wikidata.org/entity/Q824> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q824> <neo4j://graph.schema#name> "Oregon"@en .
+<http://www.wikidata.org/entity/Q599439> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q599439> <neo4j://graph.schema#name> "John Wood"@en .
+<http://www.wikidata.org/entity/Q1261> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q1261> <neo4j://graph.schema#name> "Colorado"@en .
+<http://www.wikidata.org/entity/Q5083> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q5083> <neo4j://graph.schema#name> "Seattle"@en .
+<http://www.wikidata.org/entity/Q613290> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Film> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#name> "Le Mans"@en .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#pubDate> "1971-01-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q1339864> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q188473> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#countryOfOrigin> <http://www.wikidata.org/entity/Q30> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q1519311> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q172506> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1452328> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1109046> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q2165674> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q554251> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q438138> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q76399> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q376261> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q159347> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q97622> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q142> .
+<http://www.wikidata.org/entity/Q613290> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q1420> .
+<http://www.wikidata.org/entity/Q1339864> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q1339864> <neo4j://graph.schema#name> "sport film"@en .
+<http://www.wikidata.org/entity/Q1519311> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1519311> <neo4j://graph.schema#name> "Lee H. Katzin"@en .
+<http://www.wikidata.org/entity/Q172506> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q172506> <neo4j://graph.schema#name> "Jonathan Williams"@en .
+<http://www.wikidata.org/entity/Q142> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q142> <neo4j://graph.schema#name> "France"@en .
+<http://www.wikidata.org/entity/Q1420> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q1420> <neo4j://graph.schema#name> "motor car"@en .
+<http://www.wikidata.org/entity/Q1452328> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1452328> <neo4j://graph.schema#name> "Fred Haltiner"@en .
+<http://www.wikidata.org/entity/Q1109046> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1109046> <neo4j://graph.schema#name> "Luc Merenda"@en .
+<http://www.wikidata.org/entity/Q2165674> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q2165674> <neo4j://graph.schema#name> "Ronald Leigh-Hunt"@en .
+<http://www.wikidata.org/entity/Q554251> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q554251> <neo4j://graph.schema#name> "Carlo Cecchi"@en .
+<http://www.wikidata.org/entity/Q188473> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q188473> <neo4j://graph.schema#name> "action film"@en .
+<http://www.wikidata.org/entity/Q438138> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q438138> <neo4j://graph.schema#name> "Louise Edlind Friberg"@en .
+<http://www.wikidata.org/entity/Q76399> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q76399> <neo4j://graph.schema#name> "Elga Andersen"@en .
+<http://www.wikidata.org/entity/Q376261> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q376261> <neo4j://graph.schema#name> "Angelo Infanti"@en .
+<http://www.wikidata.org/entity/Q159347> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q159347> <neo4j://graph.schema#name> "Steve McQueen"@en .
+<http://www.wikidata.org/entity/Q97622> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q97622> <neo4j://graph.schema#name> "Siegfried Rauch"@en .
+<http://www.wikidata.org/entity/Q2539> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q2539> <neo4j://graph.schema#name> "machine learning"@en .
+<http://www.wikidata.org/entity/Q8683> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q8683> <neo4j://graph.schema#name> "Cold War"@en .
+<http://www.wikidata.org/entity/Q186341> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Film> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#name> "The Shining"@en .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#pubDate> "1980-10-16T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#pubDate> "1980-12-13T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#pubDate> "1980-05-23T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#pubDate> "1980-09-26T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#pubDate> "1980-11-07T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q200092> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q130232> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q604725> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q66948581> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q52207399> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q1200678> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#countryOfOrigin> <http://www.wikidata.org/entity/Q30> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#countryOfOrigin> <http://www.wikidata.org/entity/Q145> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q2001> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q235478> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q39792> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q276175> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q443790> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q454394> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q809029> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q501996> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1337159> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q959299> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1691628> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1890742> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1804810> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q1261> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q15326> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q80837> .
+<http://www.wikidata.org/entity/Q186341> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q200092> .
+<http://www.wikidata.org/entity/Q200092> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q200092> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q200092> <neo4j://graph.schema#name> "horror film"@en .
+<http://www.wikidata.org/entity/Q2001> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q2001> <neo4j://graph.schema#name> "Stanley Kubrick"@en .
+<http://www.wikidata.org/entity/Q235478> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q235478> <neo4j://graph.schema#name> "Shelley Duvall"@en .
+<http://www.wikidata.org/entity/Q15326> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q15326> <neo4j://graph.schema#name> "alcoholism"@en .
+<http://www.wikidata.org/entity/Q39792> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q39792> <neo4j://graph.schema#name> "Jack Nicholson"@en .
+<http://www.wikidata.org/entity/Q604725> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q604725> <neo4j://graph.schema#name> "psychological horror"@en .
+<http://www.wikidata.org/entity/Q145> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Country> .
+<http://www.wikidata.org/entity/Q145> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q145> <neo4j://graph.schema#name> "United Kingdom"@en .
+<http://www.wikidata.org/entity/Q66948581> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q66948581> <neo4j://graph.schema#name> "ghost film"@en .
+<http://www.wikidata.org/entity/Q52207399> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q52207399> <neo4j://graph.schema#name> "film based on a novel"@en .
+<http://www.wikidata.org/entity/Q1200678> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q1200678> <neo4j://graph.schema#name> "mystery film"@en .
+<http://www.wikidata.org/entity/Q276175> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q276175> <neo4j://graph.schema#name> "Vivian Kubrick"@en .
+<http://www.wikidata.org/entity/Q443790> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q443790> <neo4j://graph.schema#name> "Barry Nelson"@en .
+<http://www.wikidata.org/entity/Q454394> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q454394> <neo4j://graph.schema#name> "Anne Jackson"@en .
+<http://www.wikidata.org/entity/Q809029> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q809029> <neo4j://graph.schema#name> "Barry Dennen"@en .
+<http://www.wikidata.org/entity/Q501996> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q501996> <neo4j://graph.schema#name> "Scatman Crothers"@en .
+<http://www.wikidata.org/entity/Q1337159> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1337159> <neo4j://graph.schema#name> "Tony Burton"@en .
+<http://www.wikidata.org/entity/Q959299> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q959299> <neo4j://graph.schema#name> "Danny Lloyd"@en .
+<http://www.wikidata.org/entity/Q1691628> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1691628> <neo4j://graph.schema#name> "Joe Turkel"@en .
+<http://www.wikidata.org/entity/Q1890742> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1890742> <neo4j://graph.schema#name> "Manning Redwood"@en .
+<http://www.wikidata.org/entity/Q1804810> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1804810> <neo4j://graph.schema#name> "Philip Stone"@en .
+<http://www.wikidata.org/entity/Q80837> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q80837> <neo4j://graph.schema#name> "supernatural"@en .
+<http://www.wikidata.org/entity/Q472512> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Film> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#name> "The Amityville Horror"@en .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#pubDate> "1979-01-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#pubDate> "1980-01-17T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q52162262> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q590103> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q200092> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#countryOfOrigin> <http://www.wikidata.org/entity/Q30> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q966078> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q315051> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3376736> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q275803> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1282686> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q234471> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q470062> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q273215> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q555890> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q288146> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q783369> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1929137> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q978706> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1644990> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3126793> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1748409> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q1384> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q80837> .
+<http://www.wikidata.org/entity/Q472512> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q545599> .
+<http://www.wikidata.org/entity/Q52162262> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q52162262> <neo4j://graph.schema#name> "film based on literature"@en .
+<http://www.wikidata.org/entity/Q966078> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q966078> <neo4j://graph.schema#name> "Stuart Rosenberg"@en .
+<http://www.wikidata.org/entity/Q315051> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q315051> <neo4j://graph.schema#name> "James Brolin"@en .
+<http://www.wikidata.org/entity/Q1384> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q1384> <neo4j://graph.schema#name> "New York"@en .
+<http://www.wikidata.org/entity/Q3376736> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3376736> <neo4j://graph.schema#name> "Peter Maloney"@en .
+<http://www.wikidata.org/entity/Q590103> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q590103> <neo4j://graph.schema#name> "psychological thriller"@en .
+<http://www.wikidata.org/entity/Q275803> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q275803> <neo4j://graph.schema#name> "Amy Wright"@en .
+<http://www.wikidata.org/entity/Q1282686> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1282686> <neo4j://graph.schema#name> "Eddie Barth"@en .
+<http://www.wikidata.org/entity/Q234471> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q234471> <neo4j://graph.schema#name> "Margot Kidder"@en .
+<http://www.wikidata.org/entity/Q470062> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q470062> <neo4j://graph.schema#name> "Val Avery"@en .
+<http://www.wikidata.org/entity/Q273215> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q273215> <neo4j://graph.schema#name> "Rod Steiger"@en .
+<http://www.wikidata.org/entity/Q555890> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q555890> <neo4j://graph.schema#name> "Don Stroud"@en .
+<http://www.wikidata.org/entity/Q288146> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q288146> <neo4j://graph.schema#name> "Helen Shaver"@en .
+<http://www.wikidata.org/entity/Q783369> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q783369> <neo4j://graph.schema#name> "James Tolkan"@en .
+<http://www.wikidata.org/entity/Q497622> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Film> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#name> "Poltergeist"@en .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#pubDate> "1982-09-23T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#pubDate> "1982-01-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q200092> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q66948581> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#countryOfOrigin> <http://www.wikidata.org/entity/Q30> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q450728> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q776722> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q2020510> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q4730638> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q254596> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q329807> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3029688> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q230965> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q187345> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1747765> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q237809> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3934828> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1372953> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1275768> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q4020175> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q357686> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q6832757> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q232532> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3185772> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q99> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q80837> .
+<http://www.wikidata.org/entity/Q497622> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q545599> .
+<http://www.wikidata.org/entity/Q450728> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q450728> <neo4j://graph.schema#name> "Tobe Hooper"@en .
+<http://www.wikidata.org/entity/Q776722> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q776722> <neo4j://graph.schema#name> "Sonny Landham"@en .
+<http://www.wikidata.org/entity/Q99> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q99> <neo4j://graph.schema#name> "California"@en .
+<http://www.wikidata.org/entity/Q2020510> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q2020510> <neo4j://graph.schema#name> "Oliver Robins"@en .
+<http://www.wikidata.org/entity/Q4730638> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q4730638> <neo4j://graph.schema#name> "Allan Graf"@en .
+<http://www.wikidata.org/entity/Q254596> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q254596> <neo4j://graph.schema#name> "Dominique Dunne"@en .
+<http://www.wikidata.org/entity/Q1929137> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1929137> <neo4j://graph.schema#name> "Michael Sacks"@en .
+<http://www.wikidata.org/entity/Q329807> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q329807> <neo4j://graph.schema#name> "Craig T. Nelson"@en .
+<http://www.wikidata.org/entity/Q3029688> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3029688> <neo4j://graph.schema#name> "Dirk Blocker"@en .
+<http://www.wikidata.org/entity/Q978706> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q978706> <neo4j://graph.schema#name> "Murray Hamilton"@en .
+<http://www.wikidata.org/entity/Q230965> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q230965> <neo4j://graph.schema#name> "Heather O'Rourke"@en .
+<http://www.wikidata.org/entity/Q1644990> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1644990> <neo4j://graph.schema#name> "John Larch"@en .
+<http://www.wikidata.org/entity/Q187345> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q187345> <neo4j://graph.schema#name> "Zelda Rubinstein"@en .
+<http://www.wikidata.org/entity/Q1747765> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1747765> <neo4j://graph.schema#name> "Lou Perryman"@en .
+<http://www.wikidata.org/entity/Q3126793> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3126793> <neo4j://graph.schema#name> "Hank Garrett"@en .
+<http://www.wikidata.org/entity/Q237809> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q237809> <neo4j://graph.schema#name> "JoBeth Williams"@en .
+<http://www.wikidata.org/entity/Q3934828> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3934828> <neo4j://graph.schema#name> "Richard Lawson"@en .
+<http://www.wikidata.org/entity/Q1372953> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1372953> <neo4j://graph.schema#name> "James Karen"@en .
+<http://www.wikidata.org/entity/Q1275768> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1275768> <neo4j://graph.schema#name> "Fred Rogers"@en .
+<http://www.wikidata.org/entity/Q1748409> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1748409> <neo4j://graph.schema#name> "K. C. Martel"@en .
+<http://www.wikidata.org/entity/Q4020175> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q4020175> <neo4j://graph.schema#name> "William Vail"@en .
+<http://www.wikidata.org/entity/Q357686> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q357686> <neo4j://graph.schema#name> "Michael McManus"@en .
+<http://www.wikidata.org/entity/Q6832757> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q6832757> <neo4j://graph.schema#name> "Michael McManus"@en .
+<http://www.wikidata.org/entity/Q232532> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q232532> <neo4j://graph.schema#name> "Beatrice Straight"@en .
+<http://www.wikidata.org/entity/Q3185772> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3185772> <neo4j://graph.schema#name> "Joseph Walsh"@en .
+<http://www.wikidata.org/entity/Q11660> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q11660> <neo4j://graph.schema#name> "artificial intelligence"@en .
+<http://www.wikidata.org/entity/Q201424> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q201424> <neo4j://graph.schema#name> "nuclear war"@en .
+<http://www.wikidata.org/entity/Q545599> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q545599> <neo4j://graph.schema#name> "haunted house"@en .
+<http://www.wikidata.org/entity/Q550452> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q550452> <neo4j://graph.schema#name> "Nuclear arms race"@en .
+<http://www.wikidata.org/entity/Q6987386> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q6987386> <neo4j://graph.schema#name> "Negligent discharge"@en .
+<http://www.wikidata.org/entity/Q6852262> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q6852262> <neo4j://graph.schema#name> "military computer"@en .
+<http://www.wikidata.org/entity/Q2930613> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q2930613> <neo4j://graph.schema#name> "conscientious objection"@en .
+<http://www.wikidata.org/entity/Q785290> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q785290> <neo4j://graph.schema#name> "simulated reality"@en .
+<http://www.wikidata.org/entity/Q3510521> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q3510521> <neo4j://graph.schema#name> "computer security"@en .
+<http://www.wikidata.org/entity/Q1621909> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Film> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#name> "The Alamo"@en .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#pubDate> "1960-10-24T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q172980> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q369747> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q130232> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#countryOfOrigin> <http://www.wikidata.org/entity/Q30> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q40531> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q40531> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q2618760> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q2579176> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1376991> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1189988> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q2967608> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3120634> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1699819> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q374045> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q949696> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q2001604> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3083008> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1277018> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q320036> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1072969> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q437034> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1677155> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1604757> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q468635> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q274868> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q7983955> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3179611> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q1439> .
+<http://www.wikidata.org/entity/Q1621909> <neo4j://graph.schema#filmSubject> <http://www.wikidata.org/entity/Q638530> .
+<http://www.wikidata.org/entity/Q172980> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q172980> <neo4j://graph.schema#name> "Western film"@en .
+<http://www.wikidata.org/entity/Q40531> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q40531> <neo4j://graph.schema#name> "John Wayne"@en .
+<http://www.wikidata.org/entity/Q1439> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q1439> <neo4j://graph.schema#name> "Texas"@en .
+<http://www.wikidata.org/entity/Q638530> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Topic> .
+<http://www.wikidata.org/entity/Q638530> <neo4j://graph.schema#name> "Revoluci\u00F3n de Texas"@en .
+<http://www.wikidata.org/entity/Q369747> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q369747> <neo4j://graph.schema#name> "war film"@en .
+<http://www.wikidata.org/entity/Q2618760> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q2618760> <neo4j://graph.schema#name> "Carlos Arruza"@en .
+<http://www.wikidata.org/entity/Q2579176> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q2579176> <neo4j://graph.schema#name> "William \"Bill\" Henry"@en .
+<http://www.wikidata.org/entity/Q1376991> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1376991> <neo4j://graph.schema#name> "Hank Worden"@en .
+<http://www.wikidata.org/entity/Q1189988> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1189988> <neo4j://graph.schema#name> "Denver Pyle"@en .
+<http://www.wikidata.org/entity/Q2967608> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q2967608> <neo4j://graph.schema#name> "Chuck Roberson"@en .
+<http://www.wikidata.org/entity/Q3120634> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3120634> <neo4j://graph.schema#name> "Guinn \"Big Boy\" Williams"@en .
+<http://www.wikidata.org/entity/Q1699819> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1699819> <neo4j://graph.schema#name> "John Dierkes"@en .
+<http://www.wikidata.org/entity/Q374045> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q374045> <neo4j://graph.schema#name> "Laurence Harvey"@en .
+<http://www.wikidata.org/entity/Q949696> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q949696> <neo4j://graph.schema#name> "Ken Curtis"@en .
+<http://www.wikidata.org/entity/Q2001604> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q2001604> <neo4j://graph.schema#name> "Patrick Wayne"@en .
+<http://www.wikidata.org/entity/Q3083008> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3083008> <neo4j://graph.schema#name> "Veda Ann Borg"@en .
+<http://www.wikidata.org/entity/Q1277018> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1277018> <neo4j://graph.schema#name> "Richard Boone"@en .
+<http://www.wikidata.org/entity/Q320036> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q320036> <neo4j://graph.schema#name> "Richard Widmark"@en .
+<http://www.wikidata.org/entity/Q1072969> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1072969> <neo4j://graph.schema#name> "Chill Wills"@en .
+<http://www.wikidata.org/entity/Q437034> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q437034> <neo4j://graph.schema#name> "Linda Cristal"@en .
+<http://www.wikidata.org/entity/Q1677155> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1677155> <neo4j://graph.schema#name> "Jack Pennick"@en .
+<http://www.wikidata.org/entity/Q1604757> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1604757> <neo4j://graph.schema#name> "Joseph Calleia"@en .
+<http://www.wikidata.org/entity/Q468635> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q468635> <neo4j://graph.schema#name> "Frankie Avalon"@en .
+<http://www.wikidata.org/entity/Q274868> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q274868> <neo4j://graph.schema#name> "Olive Carey"@en .
+<http://www.wikidata.org/entity/Q7983955> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q7983955> <neo4j://graph.schema#name> "Wesley Lau"@en .
+<http://www.wikidata.org/entity/Q3179611> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3179611> <neo4j://graph.schema#name> "Joan O'Brien"@en .
+<http://www.wikidata.org/entity/Q183063> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Film> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#name> "The Sixth Sense"@en .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#pubDate> "1999-08-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#pubDate> "2000-01-05T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#pubDate> "1999-12-30T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q130232> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q200092> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q66948581> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q2484376> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#countryOfOrigin> <http://www.wikidata.org/entity/Q30> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q51489> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q207458> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q51489> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q313470> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q2680> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q255005> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q229291> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q231163> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q730074> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q489856> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q4762670> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q991754> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q1433160> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3470803> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3900816> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q1400> .
+<http://www.wikidata.org/entity/Q183063> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q1345> .
+<http://www.wikidata.org/entity/Q51489> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q51489> <neo4j://graph.schema#name> "M. Night Shyamalan"@en .
+<http://www.wikidata.org/entity/Q207458> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q207458> <neo4j://graph.schema#name> "Mischa Barton"@en .
+<http://www.wikidata.org/entity/Q1400> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q1400> <neo4j://graph.schema#name> "Pennsylvania"@en .
+<http://www.wikidata.org/entity/Q313470> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q313470> <neo4j://graph.schema#name> "Donnie Wahlberg"@en .
+<http://www.wikidata.org/entity/Q2680> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q2680> <neo4j://graph.schema#name> "Bruce Willis"@en .
+<http://www.wikidata.org/entity/Q255005> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q255005> <neo4j://graph.schema#name> "KaDee Strickland"@en .
+<http://www.wikidata.org/entity/Q229291> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q229291> <neo4j://graph.schema#name> "Toni Collette"@en .
+<http://www.wikidata.org/entity/Q231163> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q231163> <neo4j://graph.schema#name> "Olivia Williams"@en .
+<http://www.wikidata.org/entity/Q730074> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q730074> <neo4j://graph.schema#name> "Trevor Morgan"@en .
+<http://www.wikidata.org/entity/Q489856> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q489856> <neo4j://graph.schema#name> "Haley Joel Osment"@en .
+<http://www.wikidata.org/entity/Q4762670> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q4762670> <neo4j://graph.schema#name> "Angelica Page"@en .
+<http://www.wikidata.org/entity/Q991754> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q991754> <neo4j://graph.schema#name> "Bruce Norris"@en .
+<http://www.wikidata.org/entity/Q1345> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q1345> <neo4j://graph.schema#name> "Philadelphia"@en .
+<http://www.wikidata.org/entity/Q1433160> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q1433160> <neo4j://graph.schema#name> "Glenn Fitzgerald"@en .
+<http://www.wikidata.org/entity/Q3470803> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3470803> <neo4j://graph.schema#name> "Samia Shoaib"@en .
+<http://www.wikidata.org/entity/Q3900816> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3900816> <neo4j://graph.schema#name> "Peter Anthony Tambakis"@en .
+<http://www.wikidata.org/entity/Q193695> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Film> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#name> "The Wizard of Oz"@en .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#pubDate> "1939-08-25T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q52207399> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q859369> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q157394> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q842256> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q130232> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q319221> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#genre> <http://www.wikidata.org/entity/Q1361932> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#countryOfOrigin> <http://www.wikidata.org/entity/Q145> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#countryOfOrigin> <http://www.wikidata.org/entity/Q30> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q62503> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q103788> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q95111> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q51133> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#director> <http://www.wikidata.org/entity/Q56014> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q11637> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q200514> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q235639> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q240886> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q257756> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q325695> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q827411> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q524408> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q863063> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q920018> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q927057> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q958000> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3897558> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q6759802> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q7360827> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q7704028> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#castMember> <http://www.wikidata.org/entity/Q3177488> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q1558> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q2890315> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q1961610> .
+<http://www.wikidata.org/entity/Q193695> <neo4j://graph.schema#narrativeLocation> <http://www.wikidata.org/entity/Q2918164> .
+<http://www.wikidata.org/entity/Q62503> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q62503> <neo4j://graph.schema#name> "Victor Fleming"@en .
+<http://www.wikidata.org/entity/Q11637> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q11637> <neo4j://graph.schema#name> "Judy Garland"@en .
+<http://www.wikidata.org/entity/Q1558> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q1558> <neo4j://graph.schema#name> "Kansas"@en .
+<http://www.wikidata.org/entity/Q859369> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q859369> <neo4j://graph.schema#name> "comedy-drama"@en .
+<http://www.wikidata.org/entity/Q103788> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q103788> <neo4j://graph.schema#name> "Mervyn LeRoy"@en .
+<http://www.wikidata.org/entity/Q157394> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q157394> <neo4j://graph.schema#name> "fantasy film"@en .
+<http://www.wikidata.org/entity/Q842256> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q842256> <neo4j://graph.schema#name> "musical film"@en .
+<http://www.wikidata.org/entity/Q95111> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q95111> <neo4j://graph.schema#name> "Norman Taurog"@en .
+<http://www.wikidata.org/entity/Q319221> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q319221> <neo4j://graph.schema#name> "adventure film"@en .
+<http://www.wikidata.org/entity/Q51133> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q51133> <neo4j://graph.schema#name> "King Vidor"@en .
+<http://www.wikidata.org/entity/Q1361932> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Genre> .
+<http://www.wikidata.org/entity/Q1361932> <neo4j://graph.schema#name> "family film"@en .
+<http://www.wikidata.org/entity/Q56014> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q56014> <neo4j://graph.schema#name> "George Cukor"@en .
+<http://www.wikidata.org/entity/Q200514> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q200514> <neo4j://graph.schema#name> "Frank Morgan"@en .
+<http://www.wikidata.org/entity/Q235639> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q235639> <neo4j://graph.schema#name> "Billie Burke"@en .
+<http://www.wikidata.org/entity/Q240886> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q240886> <neo4j://graph.schema#name> "Ray Bolger"@en .
+<http://www.wikidata.org/entity/Q257756> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q257756> <neo4j://graph.schema#name> "Margaret Hamilton"@en .
+<http://www.wikidata.org/entity/Q325695> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q325695> <neo4j://graph.schema#name> "Clara Blandick"@en .
+<http://www.wikidata.org/entity/Q827411> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q827411> <neo4j://graph.schema#name> "Bert Lahr"@en .
+<http://www.wikidata.org/entity/Q524408> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q524408> <neo4j://graph.schema#name> "Lois January"@en .
+<http://www.wikidata.org/entity/Q863063> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q863063> <neo4j://graph.schema#name> "Billy Curtis"@en .
+<http://www.wikidata.org/entity/Q920018> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q920018> <neo4j://graph.schema#name> "Charley Grapewin"@en .
+<http://www.wikidata.org/entity/Q927057> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q927057> <neo4j://graph.schema#name> "Jack Haley"@en .
+<http://www.wikidata.org/entity/Q958000> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q958000> <neo4j://graph.schema#name> "Meinhardt Raabe"@en .
+<http://www.wikidata.org/entity/Q3897558> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3897558> <neo4j://graph.schema#name> "Pat Walshe"@en .
+<http://www.wikidata.org/entity/Q6759802> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q6759802> <neo4j://graph.schema#name> "Margaret Pellegrini"@en .
+<http://www.wikidata.org/entity/Q7360827> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q7360827> <neo4j://graph.schema#name> "Rolfe Sedan"@en .
+<http://www.wikidata.org/entity/Q7704028> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q7704028> <neo4j://graph.schema#name> "Terry"@en .
+<http://www.wikidata.org/entity/Q3177488> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Person> .
+<http://www.wikidata.org/entity/Q3177488> <neo4j://graph.schema#name> "Jerry Maren"@en .
+<http://www.wikidata.org/entity/Q2890315> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q2890315> <neo4j://graph.schema#name> "Munchkin Country"@en .
+<http://www.wikidata.org/entity/Q1961610> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q1961610> <neo4j://graph.schema#name> "Emerald City"@en .
+<http://www.wikidata.org/entity/Q2918164> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Place> .
+<http://www.wikidata.org/entity/Q2918164> <neo4j://graph.schema#name> "Land of Oz"@en .
