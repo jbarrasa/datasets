@@ -1,0 +1,51 @@
+<http://neo4j.com/indiv#The_Beatles> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Band> .
+<http://neo4j.com/indiv#The_Beatles> <neo4j://graph.schema#name> "The Beatles" .
+<http://neo4j.com/indiv#The_Beatles> <neo4j://graph.schema#member> <http://neo4j.com/indiv#John_Lennon> .
+<http://neo4j.com/indiv#The_Beatles> <neo4j://graph.schema#member> <http://neo4j.com/indiv#Paul_McCartney> .
+<http://neo4j.com/indiv#The_Beatles> <neo4j://graph.schema#member> <http://neo4j.com/indiv#George_Harrison> .
+<http://neo4j.com/indiv#The_Beatles> <neo4j://graph.schema#member> <http://neo4j.com/indiv#Ringo_Starr> .
+<http://neo4j.com/indiv#John_Lennon> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Artist> .
+<http://neo4j.com/indiv#John_Lennon> <neo4j://graph.schema#name> "John Lennon" .
+<http://neo4j.com/indiv#Paul_McCartney> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Artist> .
+<http://neo4j.com/indiv#Paul_McCartney> <neo4j://graph.schema#name> "Paul McCartney" .
+<http://neo4j.com/indiv#Ringo_Starr> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Artist> .
+<http://neo4j.com/indiv#Ringo_Starr> <neo4j://graph.schema#name> "Ringo Starr" .
+<http://neo4j.com/indiv#George_Harrison> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Artist> .
+<http://neo4j.com/indiv#George_Harrison> <neo4j://graph.schema#name> "George Harrison" .
+<http://neo4j.com/indiv#White_Album> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Album> .
+<http://neo4j.com/indiv#White_Album> <neo4j://graph.schema#name> "The Beatles (White Album)" .
+<http://neo4j.com/indiv#White_Album> <neo4j://graph.schema#date> "1968-11-22"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://neo4j.com/indiv#White_Album> <neo4j://graph.schema#author> <http://neo4j.com/indiv#The_Beatles> .
+<http://neo4j.com/indiv#White_Album> <neo4j://graph.schema#track> <http://neo4j.com/indiv#Helter_Skelter> .
+<http://neo4j.com/indiv#Helter_Skelter> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Song> .
+<http://neo4j.com/indiv#Helter_Skelter> <neo4j://graph.schema#name> "Helter Skelter" .
+<http://neo4j.com/indiv#Helter_Skelter> <neo4j://graph.schema#length> "269"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://neo4j.com/indiv#Helter_Skelter> <neo4j://graph.schema#writer> <http://neo4j.com/indiv#John_Lennon> .
+<http://neo4j.com/indiv#Helter_Skelter> <neo4j://graph.schema#writer> <http://neo4j.com/indiv#Paul_McCartney> .
+<http://neo4j.com/indiv#The_Stones> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Band> .
+<http://neo4j.com/indiv#The_Stones> <neo4j://graph.schema#name> "The Rolling Stones" .
+<http://neo4j.com/indiv#The_Stones> <neo4j://graph.schema#member> <http://neo4j.com/indiv#Mick_Jagger> .
+<http://neo4j.com/indiv#The_Stones> <neo4j://graph.schema#member> <http://neo4j.com/indiv#Keith_Richards> .
+<http://neo4j.com/indiv#The_Stones> <neo4j://graph.schema#member> <http://neo4j.com/indiv#Charlie_Watts> .
+<http://neo4j.com/indiv#The_Stones> <neo4j://graph.schema#member> <http://neo4j.com/indiv#Ronnie_Wood> .
+<http://neo4j.com/indiv#The_Stones> <neo4j://graph.schema#member> <http://neo4j.com/indiv#Bill_Wyman> .
+<http://neo4j.com/indiv#Mick_Jagger> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Artist> .
+<http://neo4j.com/indiv#Mick_Jagger> <neo4j://graph.schema#name> "Mick Jagger" .
+<http://neo4j.com/indiv#Keith_Richards> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Artist> .
+<http://neo4j.com/indiv#Keith_Richards> <neo4j://graph.schema#name> "Keith Richards" .
+<http://neo4j.com/indiv#Charlie_Watts> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Artist> .
+<http://neo4j.com/indiv#Charlie_Watts> <neo4j://graph.schema#name> "Charlie Watts" .
+<http://neo4j.com/indiv#Ronnie_Wood> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Artist> .
+<http://neo4j.com/indiv#Ronnie_Wood> <neo4j://graph.schema#name> "Ronnie Wood" .
+<http://neo4j.com/indiv#Bill_Wyman> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Artist> .
+<http://neo4j.com/indiv#Bill_Wyman> <neo4j://graph.schema#name> "Bill_Wyman" .
+<http://neo4j.com/indiv#Out_of_Our_Heads> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Album> .
+<http://neo4j.com/indiv#Out_of_Our_Heads> <neo4j://graph.schema#name> "Out of Our Heads" .
+<http://neo4j.com/indiv#Out_of_Our_Heads> <neo4j://graph.schema#date> "1965-07-30"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://neo4j.com/indiv#Out_of_Our_Heads> <neo4j://graph.schema#author> <http://neo4j.com/indiv#The_Stones> .
+<http://neo4j.com/indiv#Out_of_Our_Heads> <neo4j://graph.schema#track> <http://neo4j.com/indiv#Satisfaction> .
+<http://neo4j.com/indiv#Satisfaction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <neo4j://graph.schema#Song> .
+<http://neo4j.com/indiv#Satisfaction> <neo4j://graph.schema#name> "(I Cant Get No) Satisfaction" .
+<http://neo4j.com/indiv#Satisfaction> <neo4j://graph.schema#length> "225"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://neo4j.com/indiv#Satisfaction> <neo4j://graph.schema#writer> <http://neo4j.com/indiv#Mick_Jagger> .
+<http://neo4j.com/indiv#Satisfaction> <neo4j://graph.schema#writer> <http://neo4j.com/indiv#Keith_Richards> .
