@@ -1,5 +1,6 @@
-PREFIX music: <neo4j://graph.schema#>
-PREFIX ind: <http://neo4j.com/indiv#>
+@prefix music: <neo4j://graph.schema#> .
+@prefix ind: <http://neo4j.com/indiv#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ind:The_Beatles a music:Band ;
     music:name "The Beatles" ;
