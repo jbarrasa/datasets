@@ -1,0 +1,9 @@
+element,depends_on,abs,mode
+A,B,80,AGG
+A,C,10,AGG
+A,D,10,AGG
+A,E,10,AGG
+B,F,80,RED
+B,G,80,RED
+H,F,80,AGG
+H,I,40,AGG
