@@ -1,0 +1,10 @@
+﻿title,description,status,assigned_to_team
+"""Firmware Patch""","""Firmware Patching on Device ver-1: This urgent update unleashes the CyberGuardian patch, fortifying Device ver-1 in Sector 3 against the Phantom Flux threat. It boosts the device neural network processing, enabling predictive threat detection. Moreover, the patch introduces Quantum Encryption for data security, and an AI-driven self-healing mechanism ensuring uninterrupted service.""","""open""","""TeamA"""
+"""Service Provision""","""Provision Service per Order 354. Set up new VPN service as specified in work order 354""","""in progress""","""TeamB"""
+"""Service Update""","""Update Routing for Service A7X. Modify network routing to enhance performance of Service A7X""","""completed""","""TeamC"""
+"""Monitoring""","""Monitor Network Segment Z12. Continuous performance monitoring of critical network segment Z12""","""open""","""TeamD"""
+"""Security Audit""","""Conduct Security Audit on Device sta-3. Perform detailed security checks on Device sta-3 following protocol 5.2""","""in progress""","""TeamA"""
+"""DR Test""","""Disaster Recovery Test for Device orl-3, Execute scheduled disaster recovery drills for Device orl-3""","""completed""","""TeamB"""
+"""Service Update""","""Optimize Bandwidth for Event X45. Manage and allocate bandwidth for high-traffic Event X45""","""open""","""TeamC"""
+"""Service Update""","""Reconfigure Firewall Settings in device sur-2. Adjust firewall parameters in device sur-2 for enhanced security""","""in progress""","""TeamD"""
+"""Service Update""","""Revise User Access for Group Y. Update and review user access permissions for Group Y""","""in progress""","""TeamA"""
