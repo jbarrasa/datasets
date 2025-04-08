@@ -1,0 +1,28 @@
+@prefix : <http://example.org/football#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+:FootballPlayer a owl:Class ;
+    rdfs:label "FootballPlayer" .
+
+:FootballClub a owl:Class ;
+    rdfs:label "FootballClub" .
+
+:FootballTeam a owl:Class ;
+    rdfs:label "FootballTeam" .
+
+:City a owl:Class ;
+    rdfs:label "City" .
+
+:playsFor a owl:ObjectProperty ;
+    rdfs:domain :FootballPlayer ;
+    rdfs:range :FootballClub .
+
+:memberOf a owl:ObjectProperty ;
+    rdfs:domain :FootballPlayer ;
+    rdfs:range :FootballTeam .
+
+:clubBasedIn a owl:ObjectProperty ;
+    rdfs:domain :FootballClub ;
+    rdfs:range :City .
