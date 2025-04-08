@@ -8,4 +8,4 @@ ex:MobilePhone a rdfs:Class .
 ex:OnlineStore a rdfs:Class .
 
 ex:Person ex:owns ex:MobilePhone .
-ex:MobilePhone ex:purchased in ex:OnlineStore .
+ex:MobilePhone ex:purchased_in ex:OnlineStore .
