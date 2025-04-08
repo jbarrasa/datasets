@@ -18,6 +18,16 @@
 :Critic a owl:Class ;
     rdfs:label "Critic" .
 
+:bookTitle rdf:type owl:DatatypeProperty , owl:InverseFunctionalProperty ;
+    rdfs:comment "represent the title or an identifying description of the book" ;
+    rdfs:range xsd:string ;
+    rdfs:domain :Book .
+
+:artistKownAs rdf:type owl:DatatypeProperty , owl:InverseFunctionalProperty ;
+    rdfs:comment "the name a book author is known as" ;
+    rdfs:range xsd:string ;
+    rdfs:domain :Author .
+
 :hasAuthor a owl:ObjectProperty ;
     rdfs:domain :Book ;
     rdfs:range :Author .
