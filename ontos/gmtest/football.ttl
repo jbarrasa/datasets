@@ -2,6 +2,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 :FootballPlayer a owl:Class ;
     rdfs:label "FootballPlayer" .
@@ -14,6 +15,16 @@
 
 :City a owl:Class ;
     rdfs:label "City" .
+
+:playerName rdf:type owl:DatatypeProperty , owl:InverseFunctionalProperty ;
+    rdfs:comment "the name or nickname of a football player" ;
+    rdfs:range xsd:string ;
+    rdfs:domain :FootballPlayer .
+
+:clubName rdf:type owl:DatatypeProperty , owl:InverseFunctionalProperty ;
+    rdfs:comment "the name or nickname of a football club" ;
+    rdfs:range xsd:string ;
+    rdfs:domain :FootballClub .
 
 :playsFor a owl:ObjectProperty ;
     rdfs:domain :FootballPlayer ;
