@@ -1,0 +1,39 @@
+@prefix : <http://example.org/book#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+:Book a owl:Class ;
+    rdfs:label "Book" .
+
+:Author a owl:Class ;
+    rdfs:label "Author" .
+
+:Genre a owl:Class ;
+    rdfs:label "Genre" .
+
+:Review a owl:Class ;
+    rdfs:label "Review" .
+
+:Critic a owl:Class ;
+    rdfs:label "Critic" .
+
+:hasAuthor a owl:ObjectProperty ;
+    rdfs:domain :Book ;
+    rdfs:range :Author .
+
+:hasGenre a owl:ObjectProperty ;
+    rdfs:domain :Book ;
+    rdfs:range :Genre .
+
+:hasReview a owl:ObjectProperty ;
+    rdfs:domain :Book ;
+    rdfs:range :Review .
+
+:writtenBy a owl:ObjectProperty ;
+    rdfs:domain :Review ;
+    rdfs:range :Critic .
+
+:publicationYear a owl:DatatypeProperty ;
+    rdfs:domain :Book ;
+    rdfs:range rdfs:Literal .
