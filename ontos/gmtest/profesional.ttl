@@ -1,0 +1,16 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix ex: <http://example.org/> .
+
+ex:Person rdf:type owl:Class ;
+    rdf:comment "describes a professional individual".
+ex:personsName owl:DatatypeProperty;
+    rdfs:domain ex:Person .
+
+ex:Organization rdf:type owl:Class .
+
+
+ex:worksFor rdf:type owl:ObjectProperty .
+ex:worksFor rdfs:domain ex:Person .
+ex:worksFor rdfs:range ex:Organization .
