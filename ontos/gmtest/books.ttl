@@ -29,6 +29,11 @@
     rdfs:range xsd:string ;
     rdfs:domain :Author .
 
+:genreDescriptor rdf:type owl:DatatypeProperty , owl:InverseFunctionalProperty ;
+    rdfs:comment "a descriptive identifier of the genre" ;
+    rdfs:range xsd:string ;
+    rdfs:domain :Genre .
+
 :hasAuthor a owl:ObjectProperty ;
     rdfs:domain :Book ;
     rdfs:range :Author .
