@@ -1,0 +1,11 @@
+comparison_sid,protein_sid,logFC,pValue,adjPValue,regulated,significance,data_type,note,correlation
+COMP001,P48736,2.3,0.002,0.018,up,significant,proteomics,,
+COMP001,P16671,3.1,0.0003,0.006,up,significant,proteomics,,
+COMP001,P02778,2.8,0.0008,0.012,up,significant,proteomics,,
+COMP001,P01375,2.5,0.001,0.015,up,significant,proteomics,,
+COMP002,P42345,-1.7,0.012,0.048,down,significant,proteomics,,
+COMP002,P31749,2.0,0.003,0.022,up,significant,proteomics,,
+COMP002,P37231,-2.1,0.0005,0.008,down,significant,proteomics,,
+COMP008,P48736,2.1,0.0002,0.006,up,significant,meta_analysis,Consistent protein-level validation,
+COMP009,P48736,2.35,0.0018,0.017,up,significant,proteomics,,0.85
+COMP009,P16671,3.0,0.0005,0.008,up,significant,proteomics,,0.92

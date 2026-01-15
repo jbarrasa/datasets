@@ -1,0 +1,8 @@
+sid,name,condition
+SAMPLE001,Patient_001_Liver,NAFLD
+SAMPLE002,Control_001_Liver,Healthy
+SAMPLE003,Patient_002_Pancreas,T2D
+SAMPLE004,Control_002_Pancreas,Healthy
+SAMPLE005,Patient_003_Liver,NAFLD
+SAMPLE006,Patient_004_Adipose,MetSyn
+SAMPLE007,Control_003_Adipose,Healthy

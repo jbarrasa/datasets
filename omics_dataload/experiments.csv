@@ -1,0 +1,8 @@
+sid,type,platform,method
+EXP001,RNA-seq,Illumina NovaSeq,
+EXP002,RNA-seq,Illumina NovaSeq,
+EXP003,RNA-seq,Illumina NovaSeq,
+EXP004,Proteomics,Orbitrap Fusion,TMT-MS
+EXP005,Proteomics,Orbitrap Fusion,TMT-MS
+EXP006,Proteomics,Q Exactive HF,Label-free quantification
+EXP007,Proteomics,timsTOF Pro,DIA-PASEF

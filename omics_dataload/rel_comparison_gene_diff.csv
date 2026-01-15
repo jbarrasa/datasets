@@ -1,0 +1,9 @@
+comparison_sid,gene_symbol,logFC,pValue,adjPValue,regulated,significance,data_type,note,correlation
+COMP001,PIK3CG,2.5,0.001,0.015,up,significant,transcriptomics,,
+COMP001,CXCL10,3.2,0.0005,0.008,up,significant,transcriptomics,,
+COMP001,CD36,2.8,0.0008,0.012,up,significant,transcriptomics,,
+COMP002,MTOR,-1.8,0.01,0.045,down,significant,transcriptomics,,
+COMP002,AKT1,2.1,0.002,0.018,up,significant,transcriptomics,,
+COMP008,PIK3CG,2.2,0.0001,0.005,up,significant,meta_analysis,Shared across NAFLD and MetSyn,
+COMP009,PIK3CG,2.5,0.001,0.015,up,significant,transcriptomics,,0.85
+COMP009,CD36,2.8,0.0008,0.012,up,significant,transcriptomics,,0.92

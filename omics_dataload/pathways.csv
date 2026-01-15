@@ -1,0 +1,10 @@
+sid,name,source
+KEGG:04910,Insulin signaling pathway,KEGG
+KEGG:04064,NF-kappa B signaling pathway,KEGG
+KEGG:04151,PI3K-Akt signaling pathway,KEGG
+KEGG:04150,mTOR signaling pathway,KEGG
+KEGG:04920,Adipocytokine signaling pathway,KEGG
+KEGG:03320,PPAR signaling pathway,KEGG
+REACTOME:R-HSA-74751,Insulin receptor signaling cascade,Reactome
+REACTOME:R-HSA-449147,Signaling by Interleukins,Reactome
+WIKIPATHWAYS:WP1471,Inflammatory Response Pathway,WikiPathways
