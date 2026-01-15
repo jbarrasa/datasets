@@ -35,35 +35,35 @@ REQUIRE (n.sid, n.source) IS UNIQUE;
 // ----------------------------
 // Nodes
 // ----------------------------
-LOAD CSV WITH HEADERS FROM 'file:///projects.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/projects.csv' AS row
 CALL {
   WITH row
   MERGE (p:Project {sid: row.sid})
   SET p.name = row.name
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///tissues.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/tissues.csv' AS row
 CALL {
   WITH row
   MERGE (t:Tissue {sid: row.sid})
   SET t.name = row.name
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///diseases.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/diseases.csv' AS row
 CALL {
   WITH row
   MERGE (d:Disease {sid: row.sid})
   SET d.name = row.name
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///phenotypes.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/phenotypes.csv' AS row
 CALL {
   WITH row
   MERGE (ph:EFO {sid: row.sid})
   SET ph.name = row.name
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///samples.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/samples.csv' AS row
 CALL {
   WITH row
   MERGE (s:Sample {sid: row.sid})
@@ -71,7 +71,7 @@ CALL {
       s.condition = row.condition
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///experiments.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/experiments.csv' AS row
 CALL {
   WITH row
   MERGE (e:Experiment {sid: row.sid})
@@ -80,7 +80,7 @@ CALL {
       e.method = CASE WHEN row.method IS NULL OR row.method = '' THEN null ELSE row.method END
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///comparisons.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/comparisons.csv' AS row
 CALL {
   WITH row
   MERGE (c:Comparison {sid: row.sid})
@@ -95,7 +95,7 @@ CALL {
       c.diseases = CASE WHEN row.diseases = '' THEN null ELSE row.diseases END
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///genes.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/genes.csv' AS row
 CALL {
   WITH row
   MERGE (g:Gene {sid: row.sid})
@@ -104,13 +104,13 @@ CALL {
       g.source = row.source
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///ids.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/ids.csv' AS row
 CALL {
   WITH row
   MERGE (i:ID {sid: row.sid, source: row.source})
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///proteins.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/proteins.csv' AS row
 CALL {
   WITH row
   MERGE (p:Protein {sid: row.sid})
@@ -119,14 +119,14 @@ CALL {
       p.gene_name = row.gene_name
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///go_terms.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/go_terms.csv' AS row
 CALL {
   WITH row
   MERGE (go:GO {sid: row.sid})
   SET go.name = row.name
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///pathways.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/pathways.csv' AS row
 CALL {
   WITH row
   MERGE (pw:Pathway {sid: row.sid})
@@ -137,7 +137,7 @@ CALL {
 // ----------------------------
 // Relationships (simple)
 // ----------------------------
-LOAD CSV WITH HEADERS FROM 'file:///rel_project_samples.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_project_samples.csv' AS row
 CALL {
   WITH row
   MATCH (p:Project {sid: row.project_sid})
@@ -145,7 +145,7 @@ CALL {
   MERGE (p)-[:HAS_SAMPLE]->(s)
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///rel_sample_tissues.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_sample_tissues.csv' AS row
 CALL {
   WITH row
   MATCH (s:Sample {sid: row.sample_sid})
@@ -153,7 +153,7 @@ CALL {
   MERGE (s)-[:TAKEN_FROM]->(t)
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///rel_sample_phenotypes.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_sample_phenotypes.csv' AS row
 CALL {
   WITH row
   MATCH (s:Sample {sid: row.sample_sid})
@@ -161,7 +161,7 @@ CALL {
   MERGE (s)-[:HAS_PHENOTYPE]->(ph)
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///rel_sample_experiments.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_sample_experiments.csv' AS row
 CALL {
   WITH row
   MATCH (s:Sample {sid: row.sample_sid})
@@ -169,7 +169,7 @@ CALL {
   MERGE (s)-[:HAS_EXPERIMENT]->(e)
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///rel_comparison_experiments.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_comparison_experiments.csv' AS row
 CALL {
   WITH row
   MATCH (c:Comparison {sid: row.comparison_sid})
@@ -178,7 +178,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // Comparison->Sample with role deciding relationship type
-LOAD CSV WITH HEADERS FROM 'file:///rel_comparison_samples.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_comparison_samples.csv' AS row
 CALL {
   WITH row
   MATCH (c:Comparison {sid: row.comparison_sid})
@@ -191,7 +191,7 @@ CALL {
   )
 } IN TRANSACTIONS OF 1000 ROWS;
 
-LOAD CSV WITH HEADERS FROM 'file:///rel_comparison_diseases.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_comparison_diseases.csv' AS row
 CALL {
   WITH row
   MATCH (c:Comparison {sid: row.comparison_sid})
@@ -204,7 +204,7 @@ CALL {
 // ----------------------------
 
 // Experiment -> Gene (expression)
-LOAD CSV WITH HEADERS FROM 'file:///rel_experiment_gene_values.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_experiment_gene_values.csv' AS row
 CALL {
   WITH row
   MATCH (e:Experiment {sid: row.experiment_sid})
@@ -217,7 +217,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // Experiment -> Protein (proteomics)
-LOAD CSV WITH HEADERS FROM 'file:///rel_experiment_protein_values.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_experiment_protein_values.csv' AS row
 CALL {
   WITH row
   MATCH (e:Experiment {sid: row.experiment_sid})
@@ -232,7 +232,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // Comparison -> Gene (DGE)
-LOAD CSV WITH HEADERS FROM 'file:///rel_comparison_gene_diff.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_comparison_gene_diff.csv' AS row
 CALL {
   WITH row
   MATCH (c:Comparison {sid: row.comparison_sid})
@@ -249,7 +249,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // Comparison -> Protein (DPE)
-LOAD CSV WITH HEADERS FROM 'file:///rel_comparison_protein_diff.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_comparison_protein_diff.csv' AS row
 CALL {
   WITH row
   MATCH (c:Comparison {sid: row.comparison_sid})
@@ -266,7 +266,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // Gene -> Protein
-LOAD CSV WITH HEADERS FROM 'file:///rel_gene_protein.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_gene_protein.csv' AS row
 CALL {
   WITH row
   MATCH (g:Gene {symbol: row.gene_symbol})
@@ -275,7 +275,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // Gene -> ID
-LOAD CSV WITH HEADERS FROM 'file:///rel_gene_id.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_gene_id.csv' AS row
 CALL {
   WITH row
   MATCH (g:Gene {symbol: row.gene_symbol})
@@ -284,7 +284,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // Gene -> Disease (associations)
-LOAD CSV WITH HEADERS FROM 'file:///rel_gene_disease.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_gene_disease.csv' AS row
 CALL {
   WITH row
   MATCH (g:Gene {symbol: row.gene_symbol})
@@ -294,7 +294,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // Protein -> GO
-LOAD CSV WITH HEADERS FROM 'file:///rel_protein_go.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_protein_go.csv' AS row
 CALL {
   WITH row
   MATCH (p:Protein {sid: row.protein_sid})
@@ -304,7 +304,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // GO -> Pathway
-LOAD CSV WITH HEADERS FROM 'file:///rel_go_pathway.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_go_pathway.csv' AS row
 CALL {
   WITH row
   MATCH (go:GO {sid: row.go_sid})
@@ -313,7 +313,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // Disease -> Pathway
-LOAD CSV WITH HEADERS FROM 'file:///rel_disease_pathway.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_disease_pathway.csv' AS row
 CALL {
   WITH row
   MATCH (d:Disease {sid: row.disease_sid})
@@ -323,7 +323,7 @@ CALL {
 } IN TRANSACTIONS OF 1000 ROWS;
 
 // Protein-protein interactions
-LOAD CSV WITH HEADERS FROM 'file:///rel_ppi.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/jbarrasa/datasets/refs/heads/master/omics_dataload/rel_ppi.csv' AS row
 CALL {
   WITH row
   MATCH (p1:Protein {sid: row.protein1_sid})
