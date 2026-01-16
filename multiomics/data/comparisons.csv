@@ -1,0 +1,8 @@
+sid,name,type,tissue,n_case,n_control,analysis_date,description,stratification,diseases
+COMP001,NAFLD vs Control (Liver),disease_vs_control,Liver,2,1,2024-01-15,,,
+COMP002,T2D vs Control (Pancreas),disease_vs_control,Pancreas,1,1,2024-01-20,,,
+COMP003,Metabolic Syndrome vs Control (Adipose),disease_vs_control,Adipose,1,1,2024-02-01,,,
+COMP004,NAFLD Liver vs T2D Pancreas,cross_tissue_disease,Liver vs Pancreas,,,2024-02-10,Compare molecular signatures between NAFLD and T2D,,
+COMP006,Insulin Resistant vs Non-Resistant,phenotype_stratified,,,,2024-02-20,Compare samples with vs without insulin resistance,Insulin resistance status,
+COMP008,Pan-Metabolic Disease Signature,meta_analysis,,,,2024-03-05,Common molecular signatures across metabolic diseases,,"NAFLD, T2D, MetSyn"
+COMP009,Multi-omics NAFLD Integration,multi_omics_integration,Liver,,,2024-03-10,Integrated transcriptomics and proteomics analysis of NAFLD,,

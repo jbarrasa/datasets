@@ -1,0 +1,9 @@
+disease_sid,pathway_sid,evidence
+MONDO:0005359,KEGG:04920,literature
+MONDO:0005359,KEGG:03320,literature
+MONDO:0005359,KEGG:04151,literature
+MONDO:0005015,KEGG:04910,literature
+MONDO:0005015,KEGG:04151,literature
+MONDO:0005015,KEGG:04920,literature
+MONDO:0011382,KEGG:04920,literature
+MONDO:0011382,KEGG:04910,literature
